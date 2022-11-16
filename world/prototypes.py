@@ -48,6 +48,56 @@ See the `spawn` command and `evennia.prototypes.spawner.spawn` for more info.
 
 """
 
+WELL = {
+   "prototype_key": "well",
+   "key": "stone well",
+   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
+   "desc" : "an old stone well",
+   "capacity" : 1000,
+   "fill_level" : 1000,
+   "liquid" : "water"
+}
+
+BUCKET = {
+   "prototype_key": "bucket",
+   "key": "wooden bucket",
+   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
+   "desc" : "a sturdy wooden bucket",
+   "capacity" : 100,
+   "fill_level" : 0,
+   "liquid" : None
+}
+
+KETTLE = {
+   "prototype_key": "kettle",
+   "key": "iron kettle",
+   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
+   "desc" : "a rusty iron kettle",
+   "capacity" : 20,
+   "fill_level" : 0,
+   "liquid" : None
+}
+
+CUP = {
+   "prototype_key": "cup",
+   "key": "teacup",
+   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
+   "desc" : "a porcelain teacup",
+   "capacity" : 5,
+   "fill_level" : 0,
+   "liquid" : None
+}
+
+SPOON = {
+   "prototype_key": "spoon",
+   "key": "silver spoon",
+   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
+   "desc" : "a tarnished silver spoon",
+   "capacity" : 1,
+   "fill_level" : 0,
+   "liquid" : None
+ }
+
 ## example of module-based prototypes using
 ## the variable name as `prototype_key` and
 ## simple Attributes

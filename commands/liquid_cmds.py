@@ -55,6 +55,7 @@ class CmdFill(Command):
         to_container.transfer(transfer_amount, liquid)
 
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
+        string = ""
         if from_container.db.fill_level < transfer_amount:
             string += f"You get what you can from the now-empty {from_container}."
         else:
@@ -106,7 +107,8 @@ class CmdEmpty(Command):
         from_container.transfer(-transfer_amount, liquid)
 
         to_container = self.caller.search(self.to_container, quiet=True)
-        if to_container is not None:
+
+        if len(to_container) == 1:
             to_container = to_container[0]
             if utils.inherits_from(to_container, "typeclasses.liquidobjects.LiquidContainer"):
                 empty = to_container.db.capacity - to_container.db.fill_level
