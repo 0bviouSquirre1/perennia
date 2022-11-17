@@ -8,7 +8,7 @@ Rooms are simple containers that has no location of their own.
 from evennia.objects.objects import DefaultRoom
 
 from .objects import ObjectParent
-
+from evennia import utils
 
 class Room(ObjectParent, DefaultRoom):
     """
@@ -20,6 +20,28 @@ class Room(ObjectParent, DefaultRoom):
     See examples/object.py for a list of
     properties and methods available on all Objects.
     """
+    def at_object_creation(self):
+        self.db.count = 0
+        return super().at_object_creation()
+
+    def at_object_receive(self, moved_obj, source_location, move_type="move", **kwargs):
+        """
+        Called after an object has been moved into this object.
+
+        Args:
+            moved_obj (Object): The object moved into this one
+            source_location (Object): Where `moved_object` came from.
+                Note that this could be `None`.
+            move_type (str): The type of move. "give", "traverse", etc.
+                This is an arbitrary string provided to obj.move_to().
+                Useful for altering messages or altering logic depending
+                on the kind of movement.
+            **kwargs (dict): Arbitrary, optional arguments for users
+                overriding the call (unused by default).
+
+        """
+        if utils.inherits_from(moved_obj, "typeclasses.characters.Character"):
+            self.db.count += 1
 
     def get_display_name(self, looker=None, **kwargs):
         """
@@ -43,4 +65,7 @@ class Room(ObjectParent, DefaultRoom):
         """
         # if looker and self.locks.check_lockstring(looker, "perm(Builder)"):
         #    return "{}(#{})".format(self.name, self.id)
-        return self.db.long_name
+        if self.db.long_name:
+            return self.db.long_name
+        else:
+            return self.name
