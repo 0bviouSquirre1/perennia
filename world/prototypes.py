@@ -48,6 +48,42 @@ See the `spawn` command and `evennia.prototypes.spawner.spawn` for more info.
 
 """
 
+MINT = {
+   "prototype_key": "mint_plant",
+   "key": "mint plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a square-stemmed mint plant",
+   "produce" : "mint leaf"
+}
+TOMATO = {
+   "prototype_key": "tomato_plant",
+   "key": "tomato plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a low, bushy tomato plant",
+   "produce" : "tomato"
+}
+SUNFLOWER = {
+   "prototype_key": "sunflower_plant",
+   "key": "sunflower plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a tall, hardy sunflower",
+   "produce" : "sunflower seed"
+}
+THYME = {
+   "prototype_key": "thyme_plant",
+   "key": "thyme plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a fragrant thyme plant",
+   "produce" : "thyme leaf"
+}
+NIGHTSHADE = {
+   "prototype_key": "nightshade_plant",
+   "key": "nightshade plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a menacing-looking nightshade plant",
+   "produce" : "nightshade leaf"
+}
+
 WELL = {
    "prototype_key": "well",
    "key": "stone well",
@@ -57,7 +93,6 @@ WELL = {
    "fill_level" : 1000,
    "liquid" : "water"
 }
-
 BUCKET = {
    "prototype_key": "bucket",
    "key": "wooden bucket",
@@ -67,7 +102,6 @@ BUCKET = {
    "fill_level" : 0,
    "liquid" : None
 }
-
 KETTLE = {
    "prototype_key": "kettle",
    "key": "iron kettle",
@@ -77,7 +111,6 @@ KETTLE = {
    "fill_level" : 0,
    "liquid" : None
 }
-
 CUP = {
    "prototype_key": "cup",
    "key": "teacup",
@@ -87,7 +120,6 @@ CUP = {
    "fill_level" : 0,
    "liquid" : None
 }
-
 SPOON = {
    "prototype_key": "spoon",
    "key": "silver spoon",
