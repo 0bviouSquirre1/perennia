@@ -1,12 +1,16 @@
 from typeclasses.objects import Object
+from evennia import AttributeProperty
 
 class LiquidContainer(Object):
+    capacity = AttributeProperty(100)
+    fill_level = AttributeProperty(0)
+    liquid = AttributeProperty(None)
 
     def at_object_creation(self):
         self.db.desc = ""
-        self.db.capacity = 100
-        self.db.fill_level = 50
-        self.db.liquid = None
+        # self.db.capacity = 100
+        # self.db.fill_level = 50
+        # self.db.liquid = None
 
     def return_appearance(self, looker, **kwargs):
         """
@@ -14,10 +18,10 @@ class LiquidContainer(Object):
         
         """
         string = super().return_appearance(looker, **kwargs)
-        if self.db.fill_level == 0:
+        if self.fill_level == 0:
             status = f"\n\nThe {self} is empty."
         else:
-            status = f"\n\nThe {self} has {str(self.db.fill_level)} sips of {self.db.liquid} remaining."
+            status = f"\n\nThe {self} has {str(self.fill_level)} sips of {self.liquid} remaining."
         return string + status
 
     def transfer(self, amount, liquid):
@@ -25,11 +29,11 @@ class LiquidContainer(Object):
         Updates the amount of liquid in the container.
         
         """
-        self.db.fill_level += amount
-        if self.db.fill_level > self.db.capacity:
-            self.db.fill_level = self.db.capacity
-        if self.db.fill_level <= 0:
-            self.db.fill_level = 0
-            self.db.liquid = None
+        self.fill_level += amount
+        if self.fill_level > self.capacity:
+            self.fill_level = self.capacity
+        if self.fill_level <= 0:
+            self.fill_level = 0
+            self.liquid = None
         else:
-            self.db.liquid = liquid
+            self.liquid = liquid
