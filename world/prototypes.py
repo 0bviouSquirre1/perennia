@@ -48,6 +48,78 @@ See the `spawn` command and `evennia.prototypes.spawner.spawn` for more info.
 
 """
 
+# region Plants
+MINT = {
+   "prototype_key": "mint_plant",
+   "key": "mint plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a square-stemmed mint plant",
+   "produce" : "mint_leaf"
+}
+TOMATO_PLANT = {
+   "prototype_key": "tomato_plant",
+   "key": "tomato plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a low, bushy tomato plant",
+   "produce" : "tomato"
+}
+SUNFLOWER = {
+   "prototype_key": "sunflower_plant",
+   "key": "sunflower plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a tall, hardy sunflower",
+   "produce" : "sunflower_seed"
+}
+THYME = {
+   "prototype_key": "thyme_plant",
+   "key": "thyme plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a fragrant thyme plant",
+   "produce" : "thyme_leaf"
+}
+NIGHTSHADE = {
+   "prototype_key": "nightshade_plant",
+   "key": "nightshade plant",
+   "typeclass": "typeclasses.plantobjects.Plant",
+   "desc" : "a menacing-looking nightshade plant",
+   "produce" : "nightshade_berry"
+}
+# endregion
+
+# region Harvest Products
+MINT_LEAF = {
+   "prototype_key": "mint_leaf",
+   "key": "mint leaf",
+   "typeclass": "typeclasses.plantobjects.HarvestableObject",
+   "desc" : "a fragrant leaf from a mint plant"
+}
+TOMATO = {
+   "prototype_key": "tomato",
+   "key": "tomato",
+   "typeclass": "typeclasses.plantobjects.HarvestableObject",
+   "desc" : "a bulging, ripe tomato"
+}
+SUNFLOWER_SEED = {
+   "prototype_key": "sunflower_seed",
+   "key": "sunflower seed",
+   "typeclass": "typeclasses.plantobjects.HarvestableObject",
+   "desc" : "a crunchy sunflower seed"
+}
+THYME_LEAF = {
+   "prototype_key": "thyme_leaf",
+   "key": "thyme leaf",
+   "typeclass": "typeclasses.plantobjects.HarvestableObject",
+   "desc" : "a fragrant leaf from a thyme plant"
+}
+NIGHTSHADE_BERRY = {
+   "prototype_key": "nightshade_berry",
+   "key": "nightshade berry",
+   "typeclass": "typeclasses.plantobjects.HarvestableObject",
+   "desc" : "a dark berry from a nightshade plant"
+}
+# endregion
+
+# region Liquid Containers
 WELL = {
    "prototype_key": "well",
    "key": "stone well",
@@ -57,7 +129,6 @@ WELL = {
    "fill_level" : 1000,
    "liquid" : "water"
 }
-
 BUCKET = {
    "prototype_key": "bucket",
    "key": "wooden bucket",
@@ -67,7 +138,6 @@ BUCKET = {
    "fill_level" : 0,
    "liquid" : None
 }
-
 KETTLE = {
    "prototype_key": "kettle",
    "key": "iron kettle",
@@ -77,7 +147,6 @@ KETTLE = {
    "fill_level" : 0,
    "liquid" : None
 }
-
 CUP = {
    "prototype_key": "cup",
    "key": "teacup",
@@ -87,7 +156,6 @@ CUP = {
    "fill_level" : 0,
    "liquid" : None
 }
-
 SPOON = {
    "prototype_key": "spoon",
    "key": "silver spoon",
@@ -97,6 +165,7 @@ SPOON = {
    "fill_level" : 0,
    "liquid" : None
  }
+# endregion
 
 ## example of module-based prototypes using
 ## the variable name as `prototype_key` and
