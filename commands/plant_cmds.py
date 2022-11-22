@@ -34,8 +34,10 @@ class CmdGather(Command):
             string += f"There is nothing to gather from a {plant}."
         elif plant.produce_counter == 1:
             string += f"You gather the last {plant.produce}."
+            plant.be_harvested()
         else:
             string += f"You gather one unit of {plant.produce} from the {plant}"
+            plant.be_harvested()
         self.caller.msg(string)
 
         # TODO ADD CALL TO UPDATE PRODUCE COUNT
