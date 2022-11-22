@@ -1,5 +1,6 @@
 from typeclasses.objects import Object
 from evennia import AttributeProperty
+from evennia import prototypes
 
 class Plant(Object):
     produce_counter = AttributeProperty(0)
@@ -25,8 +26,9 @@ class Plant(Object):
     def grow(self):
         self.produce_counter += 1
 
-    def be_harvested(self):
-        # spawn produce in player inventory
+    def be_harvested(self, caller):
+        harvest = prototypes.spawner.spawn(self.produce)[0]
+        harvest.location = caller
         self.produce_counter -= 1
 
 

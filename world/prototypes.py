@@ -54,8 +54,7 @@ MINT = {
    "key": "mint plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a square-stemmed mint plant",
-   "produce" : "mint leaf",
-   "location": "player's inventory"
+   "produce" : "mint_leaf"
 }
 TOMATO_PLANT = {
    "prototype_key": "tomato_plant",
@@ -69,21 +68,21 @@ SUNFLOWER = {
    "key": "sunflower plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a tall, hardy sunflower",
-   "produce" : "sunflower seed"
+   "produce" : "sunflower_seed"
 }
 THYME = {
    "prototype_key": "thyme_plant",
    "key": "thyme plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a fragrant thyme plant",
-   "produce" : "thyme leaf"
+   "produce" : "thyme_leaf"
 }
 NIGHTSHADE = {
    "prototype_key": "nightshade_plant",
    "key": "nightshade plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a menacing-looking nightshade plant",
-   "produce" : "nightshade leaf"
+   "produce" : "nightshade_berry"
 }
 # endregion
 
@@ -91,37 +90,32 @@ NIGHTSHADE = {
 MINT_LEAF = {
    "prototype_key": "mint_leaf",
    "key": "mint leaf",
-   "location": "mint plant",
    "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a fragrant leaf from a mint plant",
+   "desc" : "a fragrant leaf from a mint plant"
 }
 TOMATO = {
    "prototype_key": "tomato",
    "key": "tomato",
-   "location": "tomato plant",
    "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a bulging, ripe tomato",
+   "desc" : "a bulging, ripe tomato"
 }
 SUNFLOWER_SEED = {
    "prototype_key": "sunflower_seed",
    "key": "sunflower seed",
-   "location": "sunflower plant",
    "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a crunchy sunflower seed",
+   "desc" : "a crunchy sunflower seed"
 }
 THYME_LEAF = {
    "prototype_key": "thyme_leaf",
    "key": "thyme leaf",
-   "location": "thyme plant",
    "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a fragrant leaf from a thyme plant",
+   "desc" : "a fragrant leaf from a thyme plant"
 }
 NIGHTSHADE_BERRY = {
    "prototype_key": "nightshade_berry",
    "key": "nightshade berry",
-   "location": "nightshade plant",
-   "typeclass": "typeclasses.oplantobjects.HarvestableObject",
-   "desc" : "a dark berry from a nightshade plant",
+   "typeclass": "typeclasses.plantobjects.HarvestableObject",
+   "desc" : "a dark berry from a nightshade plant"
 }
 # endregion
 
