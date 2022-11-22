@@ -1,6 +1,7 @@
 from typeclasses.objects import Object
 from evennia import AttributeProperty
 from evennia import prototypes
+import inflect
 
 class Plant(Object):
     produce_counter = AttributeProperty(0)
@@ -12,11 +13,16 @@ class Plant(Object):
         Returns the amount and type of liquid in the well.
         
         """
+        p = inflect.engine()
         string = super().return_appearance(looker, **kwargs)
         if self.produce_counter == 0:
             status = f"\n\nThe {self} is bare."
+        elif self.produce_counter == 1:
+            status = f"\n\nThe {self} has only one {self.produce.replace('_', ' ')} remaining."
         else:
-            status = f"\n\nThe {self} has {str(self.produce_counter)} units of {self.produce} remaining."
+            num_left = p.number_to_words(self.produce_counter)
+            plural = p.plural_noun(self.produce).replace('_', ' ')
+            status = f"\n\nThe {self} has {num_left} {plural} remaining."
         return string + status
     
     def at_object_creation(self):
