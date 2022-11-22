@@ -54,7 +54,8 @@ MINT = {
    "key": "mint plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a square-stemmed mint plant",
-   "produce" : "mint leaf"
+   "produce" : "mint leaf",
+   "location": "player's inventory"
 }
 TOMATO_PLANT = {
    "prototype_key": "tomato_plant",

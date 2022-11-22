@@ -1,5 +1,4 @@
 from commands.command import Command
-from typeclasses.liquidobjects import LiquidContainer
 from evennia import CmdSet
 from evennia import utils
 
@@ -125,10 +124,6 @@ class CmdEmpty(Command):
             string += f"You empty the {from_container} out on the ground."
 
         self.caller.msg(string)
-
-        
-# TODO testing!
-        
 
 class LiquidCmdSet(CmdSet):
 
