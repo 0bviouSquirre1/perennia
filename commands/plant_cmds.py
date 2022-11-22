@@ -39,8 +39,6 @@ class CmdGather(Command):
             plant.be_harvested(self.caller)
         self.caller.msg(string)
 
-        # TODO ADD CALL TO UPDATE PRODUCE COUNT
-
 class PlantCmdSet(CmdSet):
 
     def at_cmdset_creation(self):
