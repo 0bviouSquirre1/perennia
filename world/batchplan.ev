@@ -29,7 +29,7 @@ set front step/long_name = A set of stone steps
 # 
 set front step/desc = Stone steps lead up to a sturdy wooden door held together with iron bands at the top and bottom. Flowers crowd the threshold and bees can be heard buzzing among them. A flagstone path leads south through a wooden gate and into the shadows of the trees.
 # 
-spawn sunflower
+spawn sunflower_plant
 # 
 dig west yard = the western yard;west;w, the front step;step;s
 #
@@ -39,11 +39,11 @@ set west yard/long_name = A sunny garden
 #
 set west yard/desc = Herbs and vegetables are planted here in untidy patches. The garden is well cared-for, but whoever planted it was not interested in straight lines.
 # 
-spawn mint
+spawn mint_plant
 # 
-spawn thyme
+spawn thyme_plant
 # 
-spawn tomato
+spawn tomato_plant
 # 
 dig back yard = behind the house;behind;b, the western yard;west;w
 #
@@ -53,7 +53,7 @@ set back yard/long_name = A shady spot
 #
 set back yard/desc = On the north side of the cottage, it is noticeably cooler as the sunlight rarely reaches this spot. Weeds and wildflowers are starting to overtake this area.
 # 
-spawn nightshade
+spawn nightshade_plant
 # 
 dig east yard = the eastern yard;east;e, behind the house;behind;b
 #
