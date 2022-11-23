@@ -9,6 +9,7 @@ from evennia.objects.objects import DefaultRoom
 
 from .objects import ObjectParent
 from evennia import utils
+from evennia.utils.utils import iter_to_str
 
 class Room(ObjectParent, DefaultRoom):
     """
@@ -69,3 +70,23 @@ class Room(ObjectParent, DefaultRoom):
             return self.db.long_name
         else:
             return self.name
+
+    def get_display_exits(self, looker, **kwargs):
+        """
+        Get the 'exits' component of the object description. Called by `return_appearance`.
+
+        Args:
+            looker (Object): Object doing the looking.
+            **kwargs: Arbitrary data for use when overriding.
+        Returns:
+            str: The exits display data.
+
+        """
+
+        def _filter_visible(obj_list):
+            return (obj for obj in obj_list if obj != looker and obj.access(looker, "view"))
+
+        exits = _filter_visible(self.contents_get(content_type="exit"))
+        exit_names = iter_to_str(exi.get_display_name(looker, **kwargs) for exi in exits)
+
+        return f"|CExits: {exit_names}" if exit_names else ""
