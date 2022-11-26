@@ -71,6 +71,7 @@ class CmdEmpty(Command):
         EMPTY <container> (INTO <another container>)
     """
     key = "empty"
+    aliases = "pour"
 
     def parse(self):
         self.args = self.args.strip()
