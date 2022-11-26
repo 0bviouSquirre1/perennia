@@ -1,4 +1,8 @@
 # 
+# TODO: add front alias to front room and front step
+# TODO: add flower alias to sunflower_plant
+# TODO: add aliases for all key words in object names
+#
 dig kitchen = out;o
 # 
 tel kitchen
