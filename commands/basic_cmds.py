@@ -1,6 +1,5 @@
 from commands.command import Command
 from evennia import CmdSet
-from evennia import utils
 
 class CmdPut(Command):
     """
@@ -46,10 +45,10 @@ class CmdPut(Command):
 
 class CmdGet(Command):
     """
-    pick up something
+    Pick something up.
 
     Usage:
-      get <obj>
+      GET <object> (FROM <container>)
 
     Picks up an object from your location and puts it in
     your inventory.
@@ -106,7 +105,7 @@ class CmdGet(Command):
             # calling at_pre_get hook method
             if not obj.at_pre_get(caller):
                 return
-                
+
             success = obj.move_to(caller, quiet=True, move_type="get")
             if not success:
                 caller.msg("This can't be picked up.")
@@ -118,8 +117,29 @@ class CmdGet(Command):
         else:
             pass
 
+class CmdDrink(Command):
+    """
+    Consume a liquid of your choice.
+
+    Usage:
+      DRINK <container>
+
+    Consumes a sip of liquid from a container.
+    """
+
+    key = "drink"
+    aliases = "sip"
+
+    def func(self):
+        container = self.caller.search(self.args)
+        self.caller.msg(f"You take a sip from {container}.")
+        container.fill_level -= 1
+        if container.fill_level == 0:
+            self.caller.msg(f"You have emptied {container}")
+
 class BasicCmdSet(CmdSet):
     
     def at_cmdset_creation(self):
         self.add(CmdPut)
         self.add(CmdGet)
+        self.add(CmdDrink)
