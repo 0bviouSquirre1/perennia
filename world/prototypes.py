@@ -141,11 +141,11 @@ BUCKET = {
 KETTLE = {
    "prototype_key": "kettle",
    "key": "iron kettle",
-   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
+   "typeclass": "typeclasses.liquidobjects.BoilContainer",
    "desc" : "a rusty iron kettle",
    "capacity" : 20,
    "fill_level" : 0,
-   "liquid" : None
+   "liquid" : None,
 }
 CUP = {
    "prototype_key": "cup",

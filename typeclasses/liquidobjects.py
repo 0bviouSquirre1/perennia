@@ -1,5 +1,6 @@
 from typeclasses.objects import Object
 from evennia import AttributeProperty
+from evennia import search_tag
 
 class LiquidContainer(Object):
     capacity = AttributeProperty(100)
@@ -8,9 +9,6 @@ class LiquidContainer(Object):
 
     def at_object_creation(self):
         self.db.desc = ""
-        # self.db.capacity = 100
-        # self.db.fill_level = 50
-        # self.db.liquid = None
 
     def return_appearance(self, looker, **kwargs):
         """
@@ -37,3 +35,20 @@ class LiquidContainer(Object):
             self.liquid = None
         else:
             self.liquid = liquid
+
+class BoilContainer(LiquidContainer):
+
+    def boil(self, container, caller):
+        string = ""
+        # check for water in kettle
+        if container.fill_level != 0:
+            leaf = search_tag("boilable", location=container)
+            leaf = leaf[0]
+            if leaf:
+                string += f"You've boilt {leaf.name} tea."
+            else:
+                string += "Water boils."
+        else:
+            string += "You can't boil anything without water!"
+
+        return string

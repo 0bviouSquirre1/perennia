@@ -41,4 +41,5 @@ class Plant(Object):
 class HarvestableObject(Object):
 
     def at_object_creation(self):
+        self.tags.add("boilable")
         return super().at_object_creation()

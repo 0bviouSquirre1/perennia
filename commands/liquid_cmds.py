@@ -143,9 +143,11 @@ class CmdBoil(Command):
         container = self.caller.search(self.args)
         if not container:
             return
-        if not utils.inherits_from(container, "typeclasses.liquidobjects.LiquidContainer"):
+        if not utils.inherits_from(container, "typeclasses.liquidobjects.BoilContainer"):
             self.caller.msg("You can't boil that!")
             return
+
+        self.caller.msg(container.boil(container, self.caller))
 
 class LiquidCmdSet(CmdSet):
 
