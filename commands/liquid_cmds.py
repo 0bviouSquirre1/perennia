@@ -125,9 +125,31 @@ class CmdEmpty(Command):
             string += f"You empty the {from_container} out on the ground."
 
         self.caller.msg(string)
+    
+class CmdBoil(Command):
+    """
+    Put the kettle on to boil.
+    
+    Usage:
+        BOIL <container>
+    """
+    key = "boil"
+
+    def func(self):
+        if not self.args:
+            self.caller.msg("What do you want to boil?")
+            return
+
+        container = self.caller.search(self.args)
+        if not container:
+            return
+        if not utils.inherits_from(container, "typeclasses.liquidobjects.LiquidContainer"):
+            self.caller.msg("You can't boil that!")
+            return
 
 class LiquidCmdSet(CmdSet):
 
     def at_cmdset_creation(self):
         self.add(CmdFill)
         self.add(CmdEmpty)
+        self.add(CmdBoil)
