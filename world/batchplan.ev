@@ -5,7 +5,7 @@
 #
 dig kitchen = out;o
 # 
-tel kitchen
+out
 # 
 set kitchen/long_name = A tidy little kitchen
 # 
@@ -17,7 +17,7 @@ spawn cup
 # 
 spawn spoon
 # 
-dig front room = the front room;room;r, the kitchen;kitchen;k
+dig front room = the front room;front room;front;room;r, the kitchen;kitchen;k
 #
 room
 # 
@@ -25,7 +25,7 @@ set front room/long_name = A cozy sitting area
 # 
 set front room/desc = An overstuffed couch strewn with knitted and woven blankets sits beneath a window in the western wall, and on the north a bookcase stands packed with a jumble of mismatched tomes.
 # 
-dig front step = the front step;step;s, the front room;room;r
+dig front step = the front step;front step;front;step;s, the front room;front room;front;room;r
 #
 step
 # 
@@ -35,7 +35,7 @@ set front step/desc = Stone steps lead up to a sturdy wooden door held together 
 # 
 spawn sunflower_plant
 # 
-dig west yard = the western yard;west;w, the front step;step;s
+dig west yard = the western yard;western yard;west yard;west;w, the front step;front step;front;step;s
 #
 west
 #
@@ -49,9 +49,9 @@ spawn thyme_plant
 # 
 spawn tomato_plant
 # 
-dig back yard = behind the house;behind;b, the western yard;west;w
+dig back yard = behind the house;behind house;behind;b, the western yard;western yard;west yard;west;w
 #
-tel back yard
+behind
 #
 set back yard/long_name = A shady spot
 #
@@ -59,13 +59,13 @@ set back yard/desc = On the north side of the cottage, it is noticeably cooler a
 # 
 spawn nightshade_plant
 # 
-dig east yard = the eastern yard;east;e, behind the house;behind;b
+dig east yard = the eastern yard;eastern yard;east yard;east;e, behind the house;behind house;behind;b
 #
-tel east yard
+east
 #
 set east yard/long_name = A sunny clearing
 #
-open the front step;step;s = front step
+open the front step;front step;front;step;s = front step-1
 #
 set east yard/desc = The space between the cottage and the fence on this side has been cut clear to allow easy access to the well. The grassy stubble underfoot has started to soften, creating a pleasant walking surface.
 # 
@@ -73,8 +73,8 @@ spawn well
 # 
 spawn bucket
 #
-tel front step
+step-1
 # 
-open the eastern yard;east;e = east yard
+open the eastern yard;eastern yard;east yard;east;e = east yard-1
 # 
 tel kitchen-1
