@@ -131,11 +131,36 @@ class CmdDrink(Command):
     aliases = "sip"
 
     def func(self):
+        if not self.args:
+            self.caller.msg("Drink what?")
+            return
+
         container = self.caller.search(self.args)
         self.caller.msg(f"You take a sip from {container}.")
         container.fill_level -= 1
         if container.fill_level == 0:
             self.caller.msg(f"You have emptied {container}")
+
+class CmdEat(Command):
+    """
+    Consume a food of your choice.
+
+    Usage:
+      EAT <object>
+
+    Consumes an edible object from your inventory.
+    """
+
+    key = "eat"
+
+    def func(self):
+        if not self.args:
+            self.caller.msg("Eat what?")
+            return
+
+        obj = self.caller.search(self.args)
+        self.caller.msg(f"You eat {obj}.")
+        obj.delete()
 
 class BasicCmdSet(CmdSet):
     
@@ -143,3 +168,4 @@ class BasicCmdSet(CmdSet):
         self.add(CmdPut)
         self.add(CmdGet)
         self.add(CmdDrink)
+        self.add(CmdEat)
