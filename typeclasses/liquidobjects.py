@@ -46,6 +46,7 @@ class BoilContainer(LiquidContainer):
             leaf = leaf[0]
             if leaf:
                 string += f"You've boilt {leaf.name} tea."
+                container.liquid = f"{leaf.name} tea"
             else:
                 string += "Water boils."
         else:
