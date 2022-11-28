@@ -1,6 +1,8 @@
 from commands.command import Command
-from evennia import CmdSet
-from evennia import utils
+from evennia import CmdSet, utils
+import inflect
+
+p = inflect.engine()
 
 class CmdFill(Command):
     """
@@ -28,9 +30,20 @@ class CmdFill(Command):
             self.caller.msg("What do you want to fill?")
             return
 
+        # all of these are equivalent, I am told
+        #
+        #targets = []
+        #for obj in self.caller.search(to_container):
+        #    if utils.inherits_from(obj, "typeclasses.liquidobjects.LiquidContainer"):
+        #        targets.append(obj)
+        #
+        #targets = (x for x in self.caller.search(to_container) if utils.inherits_from(x, "typeclasses.liquidobjects.LiquidContainer"))
+        #
+        #targets = [ obj for obj in self.caller.search(to_container) if utils.inherits_from(obj, "typeclasses.liquidobjects.LiquidContainer") ]
+
         to_container = self.caller.search(self.to_container)
-        if not to_container:
-            return
+        #if not to_container:
+            #return
         if not utils.inherits_from(to_container, "typeclasses.liquidobjects.LiquidContainer"):
             self.caller.msg("You can't fill that!")
             return

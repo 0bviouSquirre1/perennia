@@ -1,6 +1,5 @@
 from typeclasses.objects import Object
-from evennia import AttributeProperty
-from evennia import search_tag
+from evennia import AttributeProperty, search_tag
 
 class LiquidContainer(Object):
     capacity = AttributeProperty(100)
