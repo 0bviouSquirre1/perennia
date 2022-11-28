@@ -1,6 +1,8 @@
 from commands.command import Command
 from evennia import CmdSet
 
+import inflect
+
 class CmdPut(Command):
     """
     Put something in a container.
@@ -110,7 +112,7 @@ class CmdGet(Command):
             if not success:
                 caller.msg("This can't be picked up.")
             else:
-                caller.msg(f"You pick up {obj.name}.")
+                caller.msg(f"You pick up the {obj.name}.")
                 caller.location.msg_contents(f"{caller.name} picks up {obj.name}.", exclude=caller)
                 # calling at_get hook method
                 obj.at_get(caller)
