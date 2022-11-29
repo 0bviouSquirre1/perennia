@@ -47,130 +47,134 @@ Possible keywords are:
 See the `spawn` command and `evennia.prototypes.spawner.spawn` for more info.
 
 """
+plant_string = "typeclasses.plantobjects.Plant"
+harvest_string = "typeclasses.plantobjects.HarvestableObject"
+liquid_string = "typeclasses.liquidobjects.LiquidContainer"
+boil_string = "typeclasses.liquidobjects.BoilContainer"
 
 # region Plants
 MINT = {
-   "prototype_key": "mint_plant",
-   "key": "mint plant",
-   "typeclass": "typeclasses.plantobjects.Plant",
-   "desc" : "a square-stemmed mint plant",
-   "produce" : "mint_leaf",
-   "aliases" : ("mint", "plant")
+    "prototype_key": "mint_plant",
+    "key": "mint plant",
+    "typeclass": plant_string,
+    "desc": "a square-stemmed mint plant",
+    "produce": "mint_leaf",
+    "aliases": ("mint", "plant"),
 }
 TOMATO_PLANT = {
-   "prototype_key": "tomato_plant",
-   "key": "tomato plant",
-   "typeclass": "typeclasses.plantobjects.Plant",
-   "desc" : "a low, bushy tomato plant",
-   "produce" : "tomato",
-   "aliases" : ("tomato", "plant")
+    "prototype_key": "tomato_plant",
+    "key": "tomato plant",
+    "typeclass": plant_string,
+    "desc": "a low, bushy tomato plant",
+    "produce": "tomato",
+    "aliases": ("tomato", "plant"),
 }
 SUNFLOWER = {
-   "prototype_key": "sunflower_plant",
-   "key": "sunflower plant",
-   "typeclass": "typeclasses.plantobjects.Plant",
-   "desc" : "a tall, hardy sunflower",
-   "produce" : "sunflower_seed",
-   "aliases" : ("flower", "sunflower", "plant")
+    "prototype_key": "sunflower_plant",
+    "key": "sunflower plant",
+    "typeclass": plant_string,
+    "desc": "a tall, hardy sunflower",
+    "produce": "sunflower_seed",
+    "aliases": ("flower", "sunflower", "plant"),
 }
 THYME = {
-   "prototype_key": "thyme_plant",
-   "key": "thyme plant",
-   "typeclass": "typeclasses.plantobjects.Plant",
-   "desc" : "a fragrant thyme plant",
-   "produce" : "thyme_leaf",
-   "aliases" : ("thyme", "plant")
+    "prototype_key": "thyme_plant",
+    "key": "thyme plant",
+    "typeclass": plant_string,
+    "desc": "a fragrant thyme plant",
+    "produce": "thyme_leaf",
+    "aliases": ("thyme", "plant"),
 }
 NIGHTSHADE = {
-   "prototype_key": "nightshade_plant",
-   "key": "nightshade plant",
-   "typeclass": "typeclasses.plantobjects.Plant",
-   "desc" : "a menacing-looking nightshade plant",
-   "produce" : "nightshade_berry",
-   "aliases" : ("nightshade", "plant")
+    "prototype_key": "nightshade_plant",
+    "key": "nightshade plant",
+    "typeclass": plant_string,
+    "desc": "a menacing-looking nightshade plant",
+    "produce": "nightshade_berry",
+    "aliases": ("nightshade", "plant"),
 }
 # endregion
 
 # region Harvest Products
 MINT_LEAF = {
-   "prototype_key": "mint_leaf",
-   "key": "mint leaf",
-   "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a fragrant leaf from a mint plant"
+    "prototype_key": "mint_leaf",
+    "key": "mint leaf",
+    "typeclass": harvest_string,
+    "desc": "a fragrant leaf from a mint plant",
 }
 TOMATO = {
-   "prototype_key": "tomato",
-   "key": "tomato",
-   "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a bulging, ripe tomato"
+    "prototype_key": "tomato",
+    "key": "tomato",
+    "typeclass": harvest_string,
+    "desc": "a bulging, ripe tomato",
 }
 SUNFLOWER_SEED = {
-   "prototype_key": "sunflower_seed",
-   "key": "sunflower seed",
-   "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a crunchy sunflower seed"
+    "prototype_key": "sunflower_seed",
+    "key": "sunflower seed",
+    "typeclass": harvest_string,
+    "desc": "a crunchy sunflower seed",
 }
 THYME_LEAF = {
-   "prototype_key": "thyme_leaf",
-   "key": "thyme leaf",
-   "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a fragrant leaf from a thyme plant"
+    "prototype_key": "thyme_leaf",
+    "key": "thyme leaf",
+    "typeclass": harvest_string,
+    "desc": "a fragrant leaf from a thyme plant",
 }
 NIGHTSHADE_BERRY = {
-   "prototype_key": "nightshade_berry",
-   "key": "nightshade berry",
-   "typeclass": "typeclasses.plantobjects.HarvestableObject",
-   "desc" : "a dark berry from a nightshade plant"
+    "prototype_key": "nightshade_berry",
+    "key": "nightshade berry",
+    "typeclass": harvest_string,
+    "desc": "a dark berry from a nightshade plant",
 }
 # endregion
 
 # region Liquid Containers
 WELL = {
-   "prototype_key": "well",
-   "key": "stone well",
-   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
-   "desc" : "an old stone well",
-   "capacity" : 1000,
-   "fill_level" : 1000,
-   "liquid" : "water"
+    "prototype_key": "well",
+    "key": "stone well",
+    "typeclass": liquid_string,
+    "desc": "an old stone well",
+    "capacity": 1000,
+    "fill_level": 1000,
+    "liquid": "water",
 }
 BUCKET = {
-   "prototype_key": "bucket",
-   "key": "wooden bucket",
-   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
-   "desc" : "a sturdy wooden bucket",
-   "capacity" : 100,
-   "fill_level" : 0,
-   "liquid" : None
+    "prototype_key": "bucket",
+    "key": "wooden bucket",
+    "typeclass": liquid_string,
+    "desc": "a sturdy wooden bucket",
+    "capacity": 100,
+    "fill_level": 0,
+    "liquid": None,
 }
 KETTLE = {
-   "prototype_key": "kettle",
-   "key": "iron kettle",
-   "typeclass": "typeclasses.liquidobjects.BoilContainer",
-   "desc" : "a rusty iron kettle",
-   "capacity" : 20,
-   "fill_level" : 0,
-   "liquid" : None,
+    "prototype_key": "kettle",
+    "key": "iron kettle",
+    "typeclass": boil_string,
+    "desc": "a rusty iron kettle",
+    "capacity": 20,
+    "fill_level": 0,
+    "liquid": None,
 }
 CUP = {
-   "prototype_key": "cup",
-   "key": "teacup",
-   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
-   "desc" : "a porcelain teacup",
-   "capacity" : 5,
-   "fill_level" : 0,
-   "liquid" : None,
-   "aliases" : "cup"
+    "prototype_key": "cup",
+    "key": "teacup",
+    "typeclass": liquid_string,
+    "desc": "a porcelain teacup",
+    "capacity": 5,
+    "fill_level": 0,
+    "liquid": None,
+    "aliases": "cup",
 }
 SPOON = {
-   "prototype_key": "spoon",
-   "key": "silver spoon",
-   "typeclass": "typeclasses.liquidobjects.LiquidContainer",
-   "desc" : "a tarnished silver spoon",
-   "capacity" : 1,
-   "fill_level" : 0,
-   "liquid" : None
- }
+    "prototype_key": "spoon",
+    "key": "silver spoon",
+    "typeclass": liquid_string,
+    "desc": "a tarnished silver spoon",
+    "capacity": 1,
+    "fill_level": 0,
+    "liquid": None,
+}
 # endregion
 
 ## example of module-based prototypes using

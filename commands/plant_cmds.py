@@ -3,6 +3,7 @@ from evennia import CmdSet
 from evennia import utils
 from evennia import prototypes
 
+
 class CmdGather(Command):
     """
     Gather from a nearby plant.
@@ -10,7 +11,9 @@ class CmdGather(Command):
     Usage:
         GATHER <plant>
     """
+
     key = "gather"
+    help_category = "In Game"
 
     def parse(self):
         self.plant = self.args.strip()
@@ -39,7 +42,7 @@ class CmdGather(Command):
             plant.be_harvested(self.caller)
         self.caller.msg(string)
 
-class PlantCmdSet(CmdSet):
 
+class PlantCmdSet(CmdSet):
     def at_cmdset_creation(self):
         self.add(CmdGather)

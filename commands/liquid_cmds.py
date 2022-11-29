@@ -4,6 +4,7 @@ import inflect
 
 p = inflect.engine()
 
+
 class CmdFill(Command):
     """
     Fill a container from another container.
@@ -11,7 +12,9 @@ class CmdFill(Command):
     Usage:
         FILL <container> FROM <another container>
     """
+
     key = "fill"
+    help_category = "In Game"
 
     def parse(self):
         self.args = self.args.strip()
@@ -32,19 +35,21 @@ class CmdFill(Command):
 
         # all of these are equivalent, I am told
         #
-        #targets = []
-        #for obj in self.caller.search(to_container):
+        # targets = []
+        # for obj in self.caller.search(to_container):
         #    if utils.inherits_from(obj, "typeclasses.liquidobjects.LiquidContainer"):
         #        targets.append(obj)
         #
-        #targets = (x for x in self.caller.search(to_container) if utils.inherits_from(x, "typeclasses.liquidobjects.LiquidContainer"))
+        # targets = (x for x in self.caller.search(to_container) if utils.inherits_from(x, "typeclasses.liquidobjects.LiquidContainer"))
         #
-        #targets = [ obj for obj in self.caller.search(to_container) if utils.inherits_from(obj, "typeclasses.liquidobjects.LiquidContainer") ]
+        # targets = [ obj for obj in self.caller.search(to_container) if utils.inherits_from(obj, "typeclasses.liquidobjects.LiquidContainer") ]
 
         to_container = self.caller.search(self.to_container)
-        #if not to_container:
-            #return
-        if not utils.inherits_from(to_container, "typeclasses.liquidobjects.LiquidContainer"):
+        # if not to_container:
+        # return
+        if not utils.inherits_from(
+            to_container, "typeclasses.liquidobjects.LiquidContainer"
+        ):
             self.caller.msg("You can't fill that!")
             return
 
@@ -53,7 +58,9 @@ class CmdFill(Command):
             self.caller.msg(f"What do you want to fill the {to_container} with?")
             return
         from_container = from_container[0]
-        if not utils.inherits_from(from_container, "typeclasses.liquidobjects.LiquidContainer"):
+        if not utils.inherits_from(
+            from_container, "typeclasses.liquidobjects.LiquidContainer"
+        ):
             self.caller.msg(f"The {from_container} does not hold liquids.")
             return
         if from_container.db.fill_level <= 0:
@@ -74,17 +81,20 @@ class CmdFill(Command):
             string += f"You fill the {to_container} from the {from_container}."
         self.caller.msg(string)
 
+
 class CmdEmpty(Command):
     """
     Empty a container, possibly into another container.
     If no other container is specified, the fill_level will
     be dumped on the ground.
-    
+
     Usage:
         EMPTY <container> (INTO <another container>)
     """
+
     key = "empty"
     aliases = "pour"
+    help_category = "In Game"
 
     def parse(self):
         self.args = self.args.strip()
@@ -107,10 +117,12 @@ class CmdEmpty(Command):
         from_container = self.caller.search(self.from_container)
         if not from_container:
             return
-        if not utils.inherits_from(from_container, "typeclasses.liquidobjects.LiquidContainer"):
+        if not utils.inherits_from(
+            from_container, "typeclasses.liquidobjects.LiquidContainer"
+        ):
             self.caller.msg("You can't empty that!")
             return
-        
+
         transfer_amount = from_container.db.fill_level
         if transfer_amount == 0:
             self.caller.msg(f"The {from_container} is already empty!")
@@ -123,13 +135,17 @@ class CmdEmpty(Command):
 
         if len(to_container) == 1:
             to_container = to_container[0]
-            if utils.inherits_from(to_container, "typeclasses.liquidobjects.LiquidContainer"):
+            if utils.inherits_from(
+                to_container, "typeclasses.liquidobjects.LiquidContainer"
+            ):
                 empty = to_container.db.capacity - to_container.db.fill_level
                 to_container.transfer(transfer_amount, liquid)
 
                 if transfer_amount > empty:
                     string += f"You empty the {from_container} into the {to_container}."
-                    string += f"\nThe rest of the {liquid} splashes all over the ground."
+                    string += (
+                        f"\nThe rest of the {liquid} splashes all over the ground."
+                    )
                 else:
                     string += f"You empty the {from_container} into the {to_container}."
             else:
@@ -138,15 +154,18 @@ class CmdEmpty(Command):
             string += f"You empty the {from_container} out on the ground."
 
         self.caller.msg(string)
-    
+
+
 class CmdBoil(Command):
     """
     Put the kettle on to boil.
-    
+
     Usage:
         BOIL <container>
     """
+
     key = "boil"
+    help_category = "In Game"
 
     def func(self):
         if not self.args:
@@ -156,14 +175,16 @@ class CmdBoil(Command):
         container = self.caller.search(self.args)
         if not container:
             return
-        if not utils.inherits_from(container, "typeclasses.liquidobjects.BoilContainer"):
+        if not utils.inherits_from(
+            container, "typeclasses.liquidobjects.BoilContainer"
+        ):
             self.caller.msg("You can't boil that!")
             return
 
         self.caller.msg(container.boil(container, self.caller))
 
-class LiquidCmdSet(CmdSet):
 
+class LiquidCmdSet(CmdSet):
     def at_cmdset_creation(self):
         self.add(CmdFill)
         self.add(CmdEmpty)

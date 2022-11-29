@@ -18,6 +18,7 @@ from evennia import default_cmds
 from commands import liquid_cmds, plant_cmds, basic_cmds
 from evennia.contrib.utils.git_integration import GitCmdSet
 
+
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
     The `CharacterCmdSet` contains general in-game commands like `look`,

@@ -3,6 +3,7 @@ from evennia import CmdSet
 
 import inflect
 
+
 class CmdPut(Command):
     """
     Put something in a container.
@@ -10,7 +11,10 @@ class CmdPut(Command):
     Usage:
         PUT <object> IN <container>
     """
+
     key = "put"
+    aliases = "place"
+    help_category = "In Game"
 
     def parse(self):
         self.args = self.args.strip()
@@ -45,6 +49,7 @@ class CmdPut(Command):
         string = f"You put the {put_obj} into the {container}."
         self.caller.msg(string)
 
+
 class CmdGet(Command):
     """
     Pick something up.
@@ -58,6 +63,7 @@ class CmdGet(Command):
 
     key = "get"
     aliases = "grab"
+    help_category = "In Game"
     locks = "cmd:all();view:perm(Developer);read:perm(Developer)"
     arg_regex = r"\s|$"
 
@@ -94,7 +100,6 @@ class CmdGet(Command):
             caller.msg("You can't get yourself.")
             return
 
-
         if len(obj) == 1:
             obj = obj[0]
 
@@ -113,11 +118,14 @@ class CmdGet(Command):
                 caller.msg("This can't be picked up.")
             else:
                 caller.msg(f"You pick up the {obj.name}.")
-                caller.location.msg_contents(f"{caller.name} picks up {obj.name}.", exclude=caller)
+                caller.location.msg_contents(
+                    f"{caller.name} picks up {obj.name}.", exclude=caller
+                )
                 # calling at_get hook method
                 obj.at_get(caller)
         else:
             pass
+
 
 class CmdDrink(Command):
     """
@@ -131,6 +139,7 @@ class CmdDrink(Command):
 
     key = "drink"
     aliases = "sip"
+    help_category = "In Game"
 
     def func(self):
         if not self.args:
@@ -143,6 +152,7 @@ class CmdDrink(Command):
         if container.fill_level == 0:
             self.caller.msg(f"You have emptied {container}")
 
+
 class CmdEat(Command):
     """
     Consume a food of your choice.
@@ -154,6 +164,8 @@ class CmdEat(Command):
     """
 
     key = "eat"
+    aliases = "munch"
+    help_category = "In Game"
 
     def func(self):
         if not self.args:
@@ -164,8 +176,8 @@ class CmdEat(Command):
         self.caller.msg(f"You eat {obj}.")
         obj.delete()
 
+
 class BasicCmdSet(CmdSet):
-    
     def at_cmdset_creation(self):
         self.add(CmdPut)
         self.add(CmdGet)
