@@ -14,7 +14,7 @@ class CmdFill(Command):
     """
 
     key = "fill"
-    help_category = "In Game"
+    help_category = "Interaction"
 
     def parse(self):
         self.args = self.args.strip()
@@ -94,7 +94,7 @@ class CmdEmpty(Command):
 
     key = "empty"
     aliases = "pour"
-    help_category = "In Game"
+    help_category = "Interaction"
 
     def parse(self):
         self.args = self.args.strip()
@@ -165,7 +165,7 @@ class CmdBoil(Command):
     """
 
     key = "boil"
-    help_category = "In Game"
+    help_category = "Interaction"
 
     def func(self):
         if not self.args:

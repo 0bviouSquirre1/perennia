@@ -14,7 +14,7 @@ class CmdPut(Command):
 
     key = "put"
     aliases = "place"
-    help_category = "In Game"
+    help_category = "Interaction"
 
     def parse(self):
         self.args = self.args.strip()
@@ -63,7 +63,7 @@ class CmdGet(Command):
 
     key = "get"
     aliases = "grab"
-    help_category = "In Game"
+    help_category = "Interaction"
     locks = "cmd:all();view:perm(Developer);read:perm(Developer)"
     arg_regex = r"\s|$"
 
@@ -139,7 +139,7 @@ class CmdDrink(Command):
 
     key = "drink"
     aliases = "sip"
-    help_category = "In Game"
+    help_category = "Interaction"
 
     def func(self):
         if not self.args:
@@ -165,7 +165,7 @@ class CmdEat(Command):
 
     key = "eat"
     aliases = "munch"
-    help_category = "In Game"
+    help_category = "Interaction"
 
     def func(self):
         if not self.args:

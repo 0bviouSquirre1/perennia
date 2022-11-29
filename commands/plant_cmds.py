@@ -1,7 +1,5 @@
 from commands.command import Command
-from evennia import CmdSet
-from evennia import utils
-from evennia import prototypes
+from evennia import CmdSet, utils
 
 
 class CmdGather(Command):
@@ -13,7 +11,7 @@ class CmdGather(Command):
     """
 
     key = "gather"
-    help_category = "In Game"
+    help_category = "Interaction"
 
     def parse(self):
         self.plant = self.args.strip()
