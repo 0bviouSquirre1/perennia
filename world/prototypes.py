@@ -54,35 +54,40 @@ MINT = {
    "key": "mint plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a square-stemmed mint plant",
-   "produce" : "mint_leaf"
+   "produce" : "mint_leaf",
+   "aliases" : ("mint", "plant")
 }
 TOMATO_PLANT = {
    "prototype_key": "tomato_plant",
    "key": "tomato plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a low, bushy tomato plant",
-   "produce" : "tomato"
+   "produce" : "tomato",
+   "aliases" : ("tomato", "plant")
 }
 SUNFLOWER = {
    "prototype_key": "sunflower_plant",
    "key": "sunflower plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a tall, hardy sunflower",
-   "produce" : "sunflower_seed"
+   "produce" : "sunflower_seed",
+   "aliases" : ("flower", "sunflower", "plant")
 }
 THYME = {
    "prototype_key": "thyme_plant",
    "key": "thyme plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a fragrant thyme plant",
-   "produce" : "thyme_leaf"
+   "produce" : "thyme_leaf",
+   "aliases" : ("thyme", "plant")
 }
 NIGHTSHADE = {
    "prototype_key": "nightshade_plant",
    "key": "nightshade plant",
    "typeclass": "typeclasses.plantobjects.Plant",
    "desc" : "a menacing-looking nightshade plant",
-   "produce" : "nightshade_berry"
+   "produce" : "nightshade_berry",
+   "aliases" : ("nightshade", "plant")
 }
 # endregion
 
@@ -154,7 +159,8 @@ CUP = {
    "desc" : "a porcelain teacup",
    "capacity" : 5,
    "fill_level" : 0,
-   "liquid" : None
+   "liquid" : None,
+   "aliases" : "cup"
 }
 SPOON = {
    "prototype_key": "spoon",

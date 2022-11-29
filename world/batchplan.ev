@@ -1,7 +1,6 @@
 # 
-# TODO: add front alias to front room and front step
-# TODO: add flower alias to sunflower_plant
-# TODO: add aliases for all key words in object names
+#
+set limbo/desc = The space between molecules.
 #
 dig kitchen = out;o
 # 
