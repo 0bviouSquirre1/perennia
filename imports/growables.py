@@ -54,6 +54,14 @@ from evennia.utils import gametime, delay
 #   if none, create a blank stages dict for obj
 #   set growth_stages from the stages dict
 #   do the same thing for growth status, only use an initial dict with keys
+#   run grow() for the first iteration
+# grow() runs at the end of __init__()
+#   gets the current gametime
+#   gets the last update time from object
+#   if the delta between the last update and now is less than a growth cycle
+#    AND it's not being forced
+#   quit the process
+#   
 
 
 class GrowthHandler:
