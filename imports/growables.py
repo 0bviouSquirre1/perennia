@@ -47,6 +47,13 @@ from evennia.utils import gametime, delay
 #  . stage (current)
 #  . age (current)
 #  . next_age
+#
+# __init__ runs first
+#   assigns obj and delay
+#   checks for stages of growth already assigned to the object
+#   if none, create a blank stages dict for obj
+#   set growth_stages from the stages dict
+#   do the same thing for growth status, only use an initial dict with keys
 
 
 class GrowthHandler:
