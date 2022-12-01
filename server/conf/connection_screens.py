@@ -26,6 +26,12 @@ from evennia import utils
 
 CONNECTION_SCREEN = """
 |b==============================================================|n
+
+ ,_  _,,_   _,,  ,,  , ___,_    
+ |_)/_,|_) /_,|\ ||\ |' | '|\   
+'| '\_'| \'\_ |'\||'\| _|_,|-\  
+ '    `'  `  `'  `'  `'    '  ` 
+                                
  Welcome to |g{}|n, version {}!
 
  If you have an existing account, connect to it by typing:

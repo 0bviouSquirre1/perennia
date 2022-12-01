@@ -1,6 +1,7 @@
 from typeclasses.objects import Object
-from evennia import AttributeProperty
-from evennia import prototypes
+from evennia import AttributeProperty, prototypes
+from evennia.utils import lazy_property
+from imports.growables import GrowthHandler
 import inflect
 
 class Plant(Object):
@@ -8,9 +9,13 @@ class Plant(Object):
     produce = AttributeProperty(None)
     time_to_grow = 6000 # in milliseconds
 
+    @lazy_property
+    def growth(self):
+        return GrowthHandler(self)
+
     def return_appearance(self, looker, **kwargs):
         """
-        Returns the amount and type of liquid in the well.
+        Returns the amount and type gatherable items on a plant.
         
         """
         p = inflect.engine()
@@ -26,6 +31,8 @@ class Plant(Object):
         return string + status
     
     def at_object_creation(self):
+        self.growth.add("sprout", 60, key="seedling", desc="A tiny seedling, just barely sprouted.")
+        self.growth.add("young", 1200, key="small plant", desc="This plant is small but still growing.", leaves=True)
         self.grow()
         return super().at_object_creation()
 
@@ -36,6 +43,7 @@ class Plant(Object):
         harvest = prototypes.spawner.spawn(self.produce)[0]
         harvest.location = caller
         self.produce_counter -= 1
+    
 
 
 class HarvestableObject(Object):

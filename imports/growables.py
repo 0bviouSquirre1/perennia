@@ -22,9 +22,31 @@ e.g. if your object has a method `at_grow(self, stage)` you can have it trigger 
 self.add("sprout", 1200, key="seedling", desc="A tiny seedling, just barely sprouted.", at_grow="sprout")
 ```
 Note: I haven't tested the callable functionality, but it should work.
+
+From InspectorCaracal
 """
 
 from evennia.utils import gametime, delay
+
+# self.obj
+#  . obj.status: dict of
+# . . last_update
+# . . stage
+# . . age
+# . . next_age
+# ... added to obj in handler __init__()
+#  . obj.stages
+# . . blank dict added to obj in handler __init__()
+# . . self.growth.add() in at_object_creation() to classes that grow
+# self.delay
+# self.growth_stages
+#  . dictionary of possible stages of an object
+#  . filled from the stages attribute on the object
+# self.growth_status
+#  . last_update (gametime at init or last growth)
+#  . stage (current)
+#  . age (current)
+#  . next_age
 
 
 class GrowthHandler:
