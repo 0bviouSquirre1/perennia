@@ -73,7 +73,7 @@ SUNFLOWER = {
     "prototype_key": "sunflower_plant",
     "key": "sunflower plant",
     "typeclass": plant_string,
-    #"desc": "a tall, hardy sunflower",
+    "desc": "a sturdy sunflower plant",
     "produce": "sunflower_seed",
     "aliases": ("flower", "sunflower", "plant"),
 }
