@@ -67,7 +67,7 @@ TOMATO_PLANT = {
     "typeclass": plant_string,
     "desc": "a low, bushy tomato plant",
     "produce": "tomato",
-    "aliases": ("tomato", "plant"),
+    "aliases": ("tomato", "bush", "plant"),
 }
 SUNFLOWER = {
     "prototype_key": "sunflower_plant",

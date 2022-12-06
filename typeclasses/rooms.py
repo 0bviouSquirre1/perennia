@@ -106,7 +106,7 @@ class Room(ObjectParent, DefaultRoom):
             exi.get_display_name(looker, **kwargs) for exi in exits
         )
 
-        return f"|YYou may leave to the {exit_names}." if exit_names else ""
+        return f"|YYou may leave to {exit_names}." if exit_names else ""
 
     def get_display_things(self, looker, **kwargs):
         """
@@ -119,7 +119,7 @@ class Room(ObjectParent, DefaultRoom):
             str: The things display data.
 
         """
-
+        #TODO better output of Things
         def _filter_visible(obj_list):
             return (
                 obj for obj in obj_list if obj != looker and obj.access(looker, "view")

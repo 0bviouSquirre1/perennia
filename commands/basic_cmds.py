@@ -172,8 +172,15 @@ class CmdEat(Command):
             self.caller.msg("Eat what?")
             return
 
-        obj = self.caller.search(self.args)
-        self.caller.msg(f"You eat {obj}.")
+        obj = self.caller.search(self.args, quiet=True)
+        if not obj:
+            return
+        if len(obj) > 1:
+            for objec in obj:
+                if objec.location == self.caller:
+                    obj = objec
+                    break
+        self.caller.msg(f"You eat a {obj}.")
         obj.delete()
 
 

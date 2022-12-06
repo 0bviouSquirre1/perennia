@@ -41,10 +41,10 @@ class HarvestableObject(Object):
 class GrowthScript(DefaultScript):
     def at_script_creation(self):
         self.key = "growth_script"
-        self.desc = "For growing plants"
+        self.desc = "Growing plant"
         self.interval = 60 * 60
-        self.db.plant = self.obj
+        self.plant = self.obj
 
     def at_repeat(self, **kwargs):
-        if self.db.plant.produce_counter < 10:
-            self.db.plant.produce_counter += 1
+        if self.plant.produce_counter < 10:
+            self.plant.produce_counter += 1

@@ -13,18 +13,23 @@ class CmdGather(Command):
     key = "gather"
     help_category = "Interaction"
 
+
     def parse(self):
         self.plant = self.args.strip()
 
+
     def func(self):
+        plantstring = "typeclasses.plantobjects.Plant"
+
         if not self.plant:
             self.caller.msg("What do you want to gather?")
             return
 
-        plant = self.caller.search(self.plant)
+        plant = self.caller.search(self.plant, typeclass=plantstring)
         if not plant:
             return
-        if not utils.inherits_from(plant, "typeclasses.plantobjects.Plant"):
+        if not utils.inherits_from(plant, plantstring):
+            self.caller.msg(plant)
             self.caller.msg("You can't gather that!")
             return
 
