@@ -74,6 +74,7 @@ SUNFLOWER = {
     "key": "sunflower plant",
     "typeclass": plant_string,
     "desc": "a sturdy sunflower plant",
+    "long_name": "Following the passage of the sun intently, a sunflower plant grows here.",
     "produce": "sunflower_seed",
     "aliases": ("flower", "sunflower", "plant"),
 }

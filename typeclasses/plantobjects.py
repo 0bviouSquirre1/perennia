@@ -1,12 +1,12 @@
 from typeclasses.objects import Object
 from evennia import AttributeProperty, prototypes, DefaultScript
 import inflect
-
+        
 
 class Plant(Object):
     produce_counter = AttributeProperty(0)
     produce = AttributeProperty(None)
-    
+
     def return_appearance(self, looker, **kwargs):
         """
         Returns the amount and type gatherable items on a plant.
@@ -27,9 +27,6 @@ class Plant(Object):
     def at_object_creation(self):
         self.scripts.add(GrowthScript)
 
-    def grow(self):
-        self.produce_counter += 1
-
     def be_harvested(self, caller):
         harvest = prototypes.spawner.spawn(self.produce)[0]
         harvest.location = caller
@@ -39,16 +36,15 @@ class Plant(Object):
 class HarvestableObject(Object):
     def at_object_creation(self):
         self.tags.add("boilable")
-        return super().at_object_creation()
+
 
 class GrowthScript(DefaultScript):
     def at_script_creation(self):
         self.key = "growth_script"
         self.desc = "For growing plants"
-        self.interval = 60
+        self.interval = 60 * 60
         self.db.plant = self.obj
 
     def at_repeat(self, **kwargs):
         if self.db.plant.produce_counter < 10:
             self.db.plant.produce_counter += 1
-
