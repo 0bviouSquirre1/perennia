@@ -45,7 +45,7 @@ class Object(ObjectParent, DefaultObject):
     * Base properties defined/available on all Objects
 
      key (string) - name of object
-     name (string)- same as key
+     name (string) - same as key
      dbref (int, read-only) - unique #id-number. Also "id" can be used.
      date_created (string) - time stamp of object creation
 
@@ -56,7 +56,7 @@ class Object(ObjectParent, DefaultObject):
                        Sessions directly.
      location (Object) - current location. Is None if this is a room
      home (Object) - safety start-location
-     has_account (bool, read-only)- will only return *connected* accounts
+     has_account (bool, read-only) - will only return *connected* accounts
      contents (list of Objects, read-only) - returns all objects inside this
                        object (including exits)
      exits (list of Objects, read-only) - returns all exits from this
