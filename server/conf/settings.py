@@ -35,6 +35,7 @@ from evennia.settings_default import *
 SERVERNAME = "perennia"
 AUTO_CREATE_CHARACTER_WITH_ACCOUNT = False
 AUTO_PUPPET_ON_LOGIN = False
+CHARGEN_MENU = "world.example_menu"
 
 
 ######################################################################
