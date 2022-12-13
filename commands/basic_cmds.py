@@ -29,17 +29,18 @@ class CmdPut(Command):
             self.container = None
 
     def func(self):
+        player = self.caller
         if not self.args:
-            self.caller.msg("What do you want to fill?")
+            player.msg("What do you want to fill?")
             return
 
-        put_obj = self.caller.search(self.put_obj)
+        put_obj = player.search(self.put_obj)
         if not put_obj:
             return
 
-        container = self.caller.search(self.container, quiet=True)
+        container = player.search(self.container, quiet=True)
         if not container:
-            self.caller.msg(f"Where did you want to put the {put_obj}?")
+            player.msg(f"Where did you want to put the {put_obj}?")
             return
         container = container[0]
 
@@ -47,7 +48,9 @@ class CmdPut(Command):
 
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
         string = f"You put the {put_obj} into the {container}."
-        self.caller.msg(string)
+        other_string = f"{player.name} puts the {put_obj} into the {container}."
+        player.msg(string)
+        self.caller.location.msg(other_string)
 
 
 class CmdGet(Command):
