@@ -8,6 +8,7 @@ creation commands.
 
 """
 from evennia.objects.objects import DefaultCharacter
+from evennia import AttributeProperty
 
 from .objects import ObjectParent
 
@@ -32,6 +33,9 @@ class Character(ObjectParent, DefaultCharacter):
     at_post_puppet - Echoes "AccountName has entered the game" to the room.
 
     """
+
+    default_pronouns = ["ey/em/eirs/eirself"]
+    pronouns = AttributeProperty(default_pronouns, category="personal")
 
     def get_display_name(self, looker=None, **kwargs):
         """
