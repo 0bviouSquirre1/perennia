@@ -152,10 +152,11 @@ class CmdDrink(Command):
             return
 
         container = self.caller.search(self.args)
-        self.caller.msg(f"You take a sip from {container}.")
+        string = f"$You() $conj(take) a sip from a $obj(vessel)."
         container.fill_level -= 1
         if container.fill_level == 0:
-            self.caller.msg(f"You have emptied {container}")
+            string += f"You have emptied {container}"
+        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"vessel": container})
 
 
 class CmdEat(Command):
