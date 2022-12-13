@@ -25,10 +25,8 @@ def menunode_welcome(caller):
         This process will change dramatically over time, so don't get too attached to anything.
     """
     )
-    help = (
-        "Names that won't break immersion are generally one word (Jod, Jenkins), not a phrase (TheScatMan). Names should also not be completely unpronounceable, we want this game to be accessible to players using screen readers as well."
-    )
-    options = {"desc": "Let's begin!", "goto": "menunode_choose_pronouns"}
+    help = "Names that won't break immersion are generally one word (Jod, Jenkins), not a phrase (TheBatMan). Names should also not be completely unpronounceable, we want this game to be accessible to players using screen readers as well."
+    options = {"desc": "Let's begin!", "goto": "menunode_choose_name"}
     return (text, help), options
 
 
@@ -37,69 +35,72 @@ def menunode_welcome(caller):
 #########################################################
 
 
-def menunode_choose_pronouns(caller, raw_string, **kwargs):
-    """Pronoun selection"""
-    char = caller.new_char
+#def menunode_choose_pronouns(caller, raw_string, **kwargs):
+#    """Pronoun selection"""
+#    char = caller.new_char
+#
+#    char.db.chargen_step = "menunode_choose_pronouns"
+#
+#    if error := kwargs.get("error"):
+#        prompt_text = f"{error}. Enter a different pronoun."
+#    else:
+#        # there was no error, so just ask them to enter a name.
+#        prompt_text = "Enter your pronouns, separated by forward slashes (/):"
+#
+#    text = dedent(
+#        f"""\
+#        |wChoosing Pronouns|n
+#
+#        Pronouns in Perennia are a matter of personal choice, so please enter your pronouns in the following format:
+#
+#        he/him/his/himself
+#        she/her/hers/herself
+#        they/them/theirs/themself
+#        fae/faen/faers/faeself
+#        etc..
+#
+#        {prompt_text}
+#        """
+#    )
+#
+#    help = "This can be changed in-game if needed."
+#    # since this is a free-text field, we just have the one
+#    options = {"key": "_default", "goto": _check_pronouns}
+#    return (text, help), options
+#
+#
+#def _check_pronouns(caller, raw_string, **kwargs):
+#    """Check and confirm pronoun choice"""
+#
+#    # strip any extraneous whitespace from the raw text
+#    # if you want to do any other validation on the name, e.g. no punctuation allowed, this
+#    # is the place!
+#    pronoun_string = raw_string.strip()
+#
+#c    # split the pronouns into a dict
+#    pronoun_string = caller.account.normalize_username(pronoun_string)
+#    pronoun_list = pronoun_string.split("/")
+#
+#    # it's free! set the character's key to the name to reserve it
+#    caller.new_char.pronouns = pronoun_list
+#    # continue on to the confirmation node
+#    return "menunode_confirm_pronouns"
+#
+#
+#def menunode_confirm_pronouns(caller, raw_string, **kwargs):
+#    """Confirm the pronoun choice"""
+#    char = caller.new_char
+#
+#    # if you have any extra validation or normalization that changed the player's input
+#    # this also serves to show the player exactly what name they'll get
+#    text = f"|w{char.pronouns}|n are your pronouns! Confirm?"
+#    # let players change their mind and go back to the name choice, if they want
+#    options = [
+#        {"key": ("Yes", "y"), "goto": "menunode_choose_name"},
+#        {"key": ("No", "n"), "goto": "menunode_choose_pronouns"},
+#    ]
+#    return text, options
 
-    char.db.chargen_step = "menunode_choose_pronouns"
-
-    if error := kwargs.get("error"):
-        prompt_text = f"{error}. Enter a different pronoun."
-    else:
-        # there was no error, so just ask them to enter a name.
-        prompt_text = "Enter your pronouns, separated by forward slashes (/):"
-    
-    text = dedent(
-        f"""\
-        |wChoosing Pronouns|n
-
-        Pronouns in Perennia are a matter of personal choice, so please enter your pronouns in the following format:
-
-        he/him/his/himself
-        she/her/hers/herself
-        they/them/theirs/themself
-        fae/faen/faers/faeself
-        etc..
-
-        {prompt_text}
-        """
-    )
-
-    help = "This can be changed in-game if needed."
-    # since this is a free-text field, we just have the one
-    options = {"key": "_default", "goto": _check_pronouns}
-    return (text, help), options
-
-def _check_pronouns(caller, raw_string, **kwargs):
-    """Check and confirm pronoun choice"""
-
-    # strip any extraneous whitespace from the raw text
-    # if you want to do any other validation on the name, e.g. no punctuation allowed, this
-    # is the place!
-    pronoun_string = raw_string.strip()
-
-    # split the pronouns into a dict
-    pronoun_string = caller.account.normalize_username(pronoun_string)
-    pronoun_list = pronoun_string.split("/")
-
-    # it's free! set the character's key to the name to reserve it
-    caller.new_char.pronouns = pronoun_list
-    # continue on to the confirmation node
-    return "menunode_confirm_pronouns"
-
-def menunode_confirm_pronouns(caller, raw_string, **kwargs):
-    """Confirm the pronoun choice"""
-    char = caller.new_char
-
-    # if you have any extra validation or normalization that changed the player's input
-    # this also serves to show the player exactly what name they'll get
-    text = f"|w{char.pronouns}|n are your pronouns! Confirm?"
-    # let players change their mind and go back to the name choice, if they want
-    options = [
-        {"key": ("Yes", "y"), "goto": "menunode_choose_name"},
-        {"key": ("No", "n"), "goto": "menunode_choose_pronouns"},
-    ]
-    return text, options
 
 #########################################################
 #                Choosing a Name
@@ -192,7 +193,7 @@ def menunode_end(caller, raw_string):
     char = caller.new_char
 
     # clear in-progress status
-    caller.new_char.attributes.remove("chargen_step")
+    char.attributes.remove("chargen_step")
     text = dedent(
         """
         Congratulations!
