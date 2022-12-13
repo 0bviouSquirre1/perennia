@@ -186,7 +186,9 @@ class CmdEat(Command):
                 if objec.location == self.caller:
                     obj = objec
                     break
-        self.caller.msg(f"You eat a {obj}.")
+        obj = obj[0]
+        string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
+        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"food": obj})
         obj.delete()
 
 
