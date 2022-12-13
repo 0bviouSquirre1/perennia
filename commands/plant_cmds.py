@@ -38,14 +38,15 @@ class CmdGather(Command):
         string = ""
         produce = plant.produce.replace('_', ' ')
         if plant.produce_counter <= 0:
-            string += f"There is nothing to gather from a {plant}."
+            self.caller.msg(f"There is nothing to gather from a {plant}.")
+            return
         elif plant.produce_counter == 1:
-            string += f"You gather the last {produce}."
+            string += f"$You() $conj(gather) the last $obj(produce) from a $obj(plant)."
             plant.be_harvested(self.caller)
         else:
-            string += f"You gather one {produce} from the {plant}."
+            string += f"$You() $conj(gather) a $obj(produce) from a $obj(plant)."
             plant.be_harvested(self.caller)
-        self.caller.msg(string)
+        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"produce": produce, "plant": plant})
 
 
 class PlantCmdSet(CmdSet):
