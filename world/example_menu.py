@@ -77,14 +77,15 @@ def menunode_welcome(caller):
     """Starting page."""
     text = dedent(
         """\
-        |wWelcome to SHANNON Character Creation!|n
+        |wWelcome to Perennia!|n
 
-        This is the starting node for all brand new characters. It's a good place to
-        remind players that they can exit the character creator and resume later,
-        especially if you're going to have a really long chargen process.
+        Perennia aims to be a lush and vibrant world, immersive and engaging with low-
+        and high-stakes adventures available to all characters. As we are in development
+        at the moment, please feel free to experiment and make suggestions where you feel
+        like you ought to be able to interact with something or have two things interact
+        with each other.
 
-        A brief overview of the game could be a good idea here, too, or a link to your
-        game wiki if you have one.
+        This process will change dramatically over time, so don't get too attached to anything.
     """
     )
     help = "You can explain the commands for exiting and resuming more specifically here."
