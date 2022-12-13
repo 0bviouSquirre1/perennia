@@ -29,28 +29,26 @@ class CmdPut(Command):
             self.container = None
 
     def func(self):
-        player = self.caller
+        caller = self.caller
         if not self.args:
-            player.msg("What do you want to fill?")
+            caller.msg("What do you want to fill?")
             return
 
-        put_obj = player.search(self.put_obj)
+        put_obj = caller.search(self.put_obj)
         if not put_obj:
             return
 
-        container = player.search(self.container, quiet=True)
+        container = caller.search(self.container, quiet=True)
         if not container:
-            player.msg(f"Where did you want to put the {put_obj}?")
+            caller.msg(f"Where did you want to put the {put_obj}?")
             return
         container = container[0]
 
         put_obj.location = container
 
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
-        string = f"You put the {put_obj} into the {container}."
-        other_string = f"{player.name} puts the {put_obj} into the {container}."
-        player.msg(string)
-        self.caller.location.msg(other_string)
+        string = f"$You() $conj(put) the {put_obj} into the {container}."
+        caller.location.msg_contents(string, from_obj=caller)
 
 
 class CmdGet(Command):
@@ -90,10 +88,13 @@ class CmdGet(Command):
         if not self.args:
             caller.msg("Get what?")
             return
+        # search the caller's location first
         obj = caller.search(self.obj, location=caller.location, quiet=True)
+        # set the caller as the next location to search
         if not obj:
             loc = caller.search(self.container, location=caller.location, quiet=True)
             obj = caller.search(self.obj, location=loc, quiet=True)
+
         if not obj:
             loc = caller.search(self.container, location=caller, quiet=True)
             obj = caller.search(self.obj, location=loc, quiet=True)
@@ -120,10 +121,11 @@ class CmdGet(Command):
             if not success:
                 caller.msg("This can't be picked up.")
             else:
-                caller.msg(f"You pick up the {obj.name}.")
-                caller.location.msg_contents(
-                    f"{caller.name} picks up {obj.name}.", exclude=caller
-                )
+                if self.container:
+                    string = f"$You() $conj(retrieve) the {obj.name} from the {self.container}."
+                else:
+                    string = f"$You() $conj(pick) up the {obj.name}."
+                caller.location.msg_contents(string, from_obj=caller)
                 # calling at_get hook method
                 obj.at_get(caller)
         else:
