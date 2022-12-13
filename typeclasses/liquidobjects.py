@@ -42,13 +42,13 @@ class BoilContainer(LiquidContainer):
         # check for water in kettle
         if container.fill_level != 0:
             leaf = search_tag("boilable", location=container)
-            leaf = leaf[0]
             if leaf:
-                string += f"You've boilt {leaf.name} tea."
+                leaf = leaf[0]
+                string += f"$You() $conj(have) $conj(boil) {leaf.name} tea."
                 container.liquid = f"{leaf.name} tea"
             else:
-                string += "Water boils."
+                string += "Water boils in the $obj(boiler)."
         else:
-            string += "You can't boil anything without water!"
+            string += f"$You() can't boil anything without water!"
 
         return string

@@ -33,20 +33,9 @@ class CmdFill(Command):
             self.caller.msg("What do you want to fill?")
             return
 
-        # all of these are equivalent, I am told
-        #
-        # targets = []
-        # for obj in self.caller.search(to_container):
-        #    if utils.inherits_from(obj, "typeclasses.liquidobjects.LiquidContainer"):
-        #        targets.append(obj)
-        #
-        # targets = (x for x in self.caller.search(to_container) if utils.inherits_from(x, "typeclasses.liquidobjects.LiquidContainer"))
-        #
-        # targets = [ obj for obj in self.caller.search(to_container) if utils.inherits_from(obj, "typeclasses.liquidobjects.LiquidContainer") ]
-
         to_container = self.caller.search(self.to_container)
-        # if not to_container:
-        # return
+        if not to_container:
+            return
         if not utils.inherits_from(
             to_container, "typeclasses.liquidobjects.LiquidContainer"
         ):
@@ -68,6 +57,11 @@ class CmdFill(Command):
             return
 
         transfer_amount = to_container.db.capacity - to_container.db.fill_level
+        if transfer_amount == 0:
+            self.caller.msg(f"The {to_container} is already full!")
+            return
+        elif transfer_amount > from_container.db.fill_level:
+            transfer_amount = from_container.db.fill_level
         liquid = from_container.db.liquid
 
         from_container.transfer(-transfer_amount, liquid)
@@ -76,10 +70,13 @@ class CmdFill(Command):
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
         string = ""
         if from_container.db.fill_level < transfer_amount:
-            string += f"You get what you can from the now-empty {from_container}."
+            string += f"$You() $conj(get) what $pron(you) can from the now-empty $obj(vessel)."
         else:
-            string += f"You fill the {to_container} from the {from_container}."
-        self.caller.msg(string)
+            string += f"$You() $conj(fill) the $obj(receptacle) from the $obj(vessel)."
+        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={
+            "receptacle": to_container,
+            "vessel": from_container}
+        )
 
 
 class CmdEmpty(Command):
@@ -142,18 +139,16 @@ class CmdEmpty(Command):
                 to_container.transfer(transfer_amount, liquid)
 
                 if transfer_amount > empty:
-                    string += f"You empty the {from_container} into the {to_container}."
-                    string += (
-                        f"\nThe rest of the {liquid} splashes all over the ground."
-                    )
+                    string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
+                    string += f"\nThe rest of the {liquid} splashes all over the ground."
                 else:
-                    string += f"You empty the {from_container} into the {to_container}."
+                    string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
             else:
-                string += f"You cannot pour {liquid} into the {to_container}."
+                self.caller.msg = f"You cannot pour {liquid} into the {to_container}."
         else:
-            string += f"You empty the {from_container} out on the ground."
+            string += f"$You() $conj(empty) the $obj(vessel) out on the ground."
 
-        self.caller.msg(string)
+        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"receptacle": to_container,"vessel": from_container})
 
 
 class CmdBoil(Command):
@@ -181,7 +176,7 @@ class CmdBoil(Command):
             self.caller.msg("You can't boil that!")
             return
 
-        self.caller.msg(container.boil(container, self.caller))
+        self.caller.location.msg_contents(container.boil(container, self.caller), from_obj=self.caller, mapping={"boiler": container})
 
 
 class LiquidCmdSet(CmdSet):
