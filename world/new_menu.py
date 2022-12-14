@@ -56,7 +56,7 @@ def menunode_choose_pronouns(caller, **kwargs):
         options.append(
             {
                 "desc": f"Choose {gender}",
-                "goto" (_set_object_choice, )
+                "goto": (_set_pronoun_choice, {"gender": gender})
             }
         )
 
@@ -69,6 +69,10 @@ def menunode_choose_pronouns(caller, **kwargs):
     )
 
     return (text, help), options
+
+def _set_pronoun_choice(caller, raw_string, gender, **kwargs):
+    caller.new_char.db.gender = gender
+    return "menunode_choose_name"
 
 #########################################################
 #                Choosing a Name
@@ -93,7 +97,7 @@ def menunode_choose_name(caller, raw_string, **kwargs):
     # this will print every time the player is prompted to choose a name,
     # including the prompt text defined above
     text = dedent(
-        f"""\
+        f"""
         |wChoosing a Name|n
 
         Especially for roleplaying-centric games, being able to choose your
