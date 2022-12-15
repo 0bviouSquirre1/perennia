@@ -56,6 +56,7 @@ HELP_ENTRY_DICTS = [
     {
         "key": "building",
         "category": "building",
+        "locks": "read:perm(Builder)",
         "text": """
             Evennia comes with a bunch of default building commands. You can
             find a building tutorial in the evennia documentation.

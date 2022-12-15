@@ -1,5 +1,5 @@
 from evennia.commands.default.comms import CmdChannel, CmdPage
-from evennia.commands.default import general, help
+from evennia.commands.default import general, help, account
 from evennia import CmdSet
 
 
@@ -8,6 +8,7 @@ class HelpCmdChannel(CmdChannel):
 
 
 class HelpCmdPage(CmdPage):
+    locks = "cmd:perm(Admin)"
     help_category = "Communication"
 
 
@@ -54,6 +55,10 @@ class HelpCmdPose(general.CmdPose):
 class HelpCmdSetDesc(general.CmdSetDesc):
     help_category = "Personal Info"
 
+class HelpCmdQuell(account.CmdQuell):
+    locks = "cmd:pperm(Builder)"
+    help_category = "Admin"
+
 
 class HelpCmdSet(CmdSet):
     def at_cmdset_creation(self):
@@ -70,3 +75,4 @@ class HelpCmdSet(CmdSet):
         self.add(HelpCmdLook)
         self.add(HelpCmdPose)
         self.add(HelpCmdSetDesc)
+        self.add(HelpCmdQuell)
