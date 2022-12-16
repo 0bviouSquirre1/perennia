@@ -31,7 +31,7 @@ class CmdPut(Command):
     def func(self):
         caller = self.caller
         if not self.args:
-            caller.msg("What do you want to fill?")
+            caller.msg("What do you want to put down?")
             return
 
         put_obj = caller.search(self.put_obj)
@@ -47,6 +47,7 @@ class CmdPut(Command):
         put_obj.move_to(container)
 
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
+        caller.msg("Success")
         string = f"$You() $conj(put) the {put_obj} into the {container}."
         caller.location.msg_contents(string, from_obj=caller)
 
@@ -122,8 +123,10 @@ class CmdGet(Command):
                 caller.msg("This can't be picked up.")
             else:
                 if self.container:
+                    caller.msg("Success")
                     string = f"$You() $conj(retrieve) the {obj.name} from the {self.container}."
                 else:
+                    caller.msg("Success Container")
                     string = f"$You() $conj(pick) up the {obj.name}."
                 caller.location.msg_contents(string, from_obj=caller)
                 # calling at_get hook method
@@ -152,6 +155,7 @@ class CmdDrink(Command):
             return
 
         container = self.caller.search(self.args)
+        self.caller.msg("Success")
         string = f"$You() $conj(take) a sip from a $obj(vessel)."
         container.fill_level -= 1
         if container.fill_level == 0:
@@ -186,7 +190,8 @@ class CmdEat(Command):
                 if objec.location == self.caller:
                     obj = objec
                     break
-        #obj = obj[0]
+        obj = obj[0]
+        self.caller.msg("Success")
         string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
         self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"food": obj})
         obj.delete()
