@@ -44,7 +44,7 @@ class CmdPut(Command):
             return
         container = container[0]
 
-        put_obj.location = container
+        put_obj.move_to(container)
 
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
         string = f"$You() $conj(put) the {put_obj} into the {container}."

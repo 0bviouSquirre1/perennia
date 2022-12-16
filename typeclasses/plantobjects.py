@@ -1,7 +1,7 @@
 from typeclasses.objects import Object
 from evennia import AttributeProperty, prototypes, DefaultScript
 import inflect
-        
+
 
 class Plant(Object):
     produce_counter = AttributeProperty(0)
@@ -17,7 +17,8 @@ class Plant(Object):
         if self.produce_counter == 0:
             status = f"\n\nThe {self} is bare."
         elif self.produce_counter == 1:
-            status = f"\n\nThe {self} has only one {self.produce.replace('_', ' ')} remaining."
+            produce = self.produce.replace('_', ' ')
+            status = f"\n\nThe {self} has only one {produce} remaining."
         else:
             num_left = p.number_to_words(self.produce_counter)
             plural = p.plural_noun(self.produce).replace("_", " ")
@@ -28,9 +29,12 @@ class Plant(Object):
         self.scripts.add(GrowthScript)
 
     def be_harvested(self, caller):
-        harvest = prototypes.spawner.spawn(self.produce)[0]
-        harvest.location = caller
-        self.produce_counter -= 1
+        if self.produce_counter > 0:
+            self.produce_counter -= 1
+            harvest = prototypes.spawner.spawn(self.produce)[0]
+            harvest.location = caller
+        else:
+            return
 
 
 class HarvestableObject(Object):
@@ -46,5 +50,7 @@ class GrowthScript(DefaultScript):
         self.plant = self.obj
 
     def at_repeat(self, **kwargs):
-        if self.plant.produce_counter < 10:
+        if self.plant.produce_counter < 0:
+            self.plant.produce_counter = 0
+        elif self.plant.produce_counter < 10:
             self.plant.produce_counter += 1
