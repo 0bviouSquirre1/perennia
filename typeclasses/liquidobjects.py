@@ -16,7 +16,7 @@ class LiquidContainer(Object):
         """
         string = super().return_appearance(looker, **kwargs)
         if self.fill_level == 0:
-            status = f"\n\nThe {self} is empty."
+            status = f"\n\nThe {self} contains no liquid."
         else:
             status = f"\n\nThe {self} has {str(self.fill_level)} sips of {self.liquid} remaining."
         return string + status
