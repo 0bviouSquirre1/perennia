@@ -1,6 +1,5 @@
 from evennia import prototypes
-from typeclasses.plantobjects import Plant
-from evennia.utils.test_resources import EvenniaTest, E
+from evennia.utils.test_resources import EvenniaTest
 
 
 class TestPlantSystem(EvenniaTest):
