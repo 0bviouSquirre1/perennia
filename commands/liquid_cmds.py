@@ -1,6 +1,9 @@
 from commands.command import Command
-from evennia import CmdSet
-from evennia import utils
+from evennia import CmdSet, utils
+import inflect
+
+p = inflect.engine()
+
 
 class CmdFill(Command):
     """
@@ -9,7 +12,9 @@ class CmdFill(Command):
     Usage:
         FILL <container> FROM <another container>
     """
+
     key = "fill"
+    help_category = "Interaction"
 
     def parse(self):
         self.args = self.args.strip()
@@ -31,7 +36,9 @@ class CmdFill(Command):
         to_container = self.caller.search(self.to_container)
         if not to_container:
             return
-        if not utils.inherits_from(to_container, "typeclasses.liquidobjects.LiquidContainer"):
+        if not utils.inherits_from(
+            to_container, "typeclasses.liquidobjects.LiquidContainer"
+        ):
             self.caller.msg("You can't fill that!")
             return
 
@@ -40,7 +47,9 @@ class CmdFill(Command):
             self.caller.msg(f"What do you want to fill the {to_container} with?")
             return
         from_container = from_container[0]
-        if not utils.inherits_from(from_container, "typeclasses.liquidobjects.LiquidContainer"):
+        if not utils.inherits_from(
+            from_container, "typeclasses.liquidobjects.LiquidContainer"
+        ):
             self.caller.msg(f"The {from_container} does not hold liquids.")
             return
         if from_container.db.fill_level <= 0:
@@ -48,6 +57,11 @@ class CmdFill(Command):
             return
 
         transfer_amount = to_container.db.capacity - to_container.db.fill_level
+        if transfer_amount == 0:
+            self.caller.msg(f"The {to_container} is already full!")
+            return
+        elif transfer_amount > from_container.db.fill_level:
+            transfer_amount = from_container.db.fill_level
         liquid = from_container.db.liquid
 
         from_container.transfer(-transfer_amount, liquid)
@@ -56,21 +70,28 @@ class CmdFill(Command):
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
         string = ""
         if from_container.db.fill_level < transfer_amount:
-            string += f"You get what you can from the now-empty {from_container}."
+            string += f"$You() $conj(get) what $pron(you) can from the now-empty $obj(vessel)."
         else:
-            string += f"You fill the {to_container} from the {from_container}."
-        self.caller.msg(string)
+            string += f"$You() $conj(fill) the $obj(receptacle) from the $obj(vessel)."
+        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={
+            "receptacle": to_container,
+            "vessel": from_container}
+        )
+
 
 class CmdEmpty(Command):
     """
     Empty a container, possibly into another container.
     If no other container is specified, the fill_level will
     be dumped on the ground.
-    
+
     Usage:
         EMPTY <container> (INTO <another container>)
     """
+
     key = "empty"
+    aliases = "pour"
+    help_category = "Interaction"
 
     def parse(self):
         self.args = self.args.strip()
@@ -93,10 +114,12 @@ class CmdEmpty(Command):
         from_container = self.caller.search(self.from_container)
         if not from_container:
             return
-        if not utils.inherits_from(from_container, "typeclasses.liquidobjects.LiquidContainer"):
+        if not utils.inherits_from(
+            from_container, "typeclasses.liquidobjects.LiquidContainer"
+        ):
             self.caller.msg("You can't empty that!")
             return
-        
+
         transfer_amount = from_container.db.fill_level
         if transfer_amount == 0:
             self.caller.msg(f"The {from_container} is already empty!")
@@ -109,24 +132,55 @@ class CmdEmpty(Command):
 
         if len(to_container) == 1:
             to_container = to_container[0]
-            if utils.inherits_from(to_container, "typeclasses.liquidobjects.LiquidContainer"):
+            if utils.inherits_from(
+                to_container, "typeclasses.liquidobjects.LiquidContainer"
+            ):
                 empty = to_container.db.capacity - to_container.db.fill_level
                 to_container.transfer(transfer_amount, liquid)
 
                 if transfer_amount > empty:
-                    string += f"You empty the {from_container} into the {to_container}."
+                    string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
                     string += f"\nThe rest of the {liquid} splashes all over the ground."
                 else:
-                    string += f"You empty the {from_container} into the {to_container}."
+                    string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
             else:
-                string += f"You cannot pour {liquid} into the {to_container}."
+                self.caller.msg = f"You cannot pour {liquid} into the {to_container}."
         else:
-            string += f"You empty the {from_container} out on the ground."
+            string += f"$You() $conj(empty) the $obj(vessel) out on the ground."
 
-        self.caller.msg(string)
+        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"receptacle": to_container,"vessel": from_container})
+
+
+class CmdBoil(Command):
+    """
+    Put the kettle on to boil.
+
+    Usage:
+        BOIL <container>
+    """
+
+    key = "boil"
+    help_category = "Interaction"
+
+    def func(self):
+        if not self.args:
+            self.caller.msg("What do you want to boil?")
+            return
+
+        container = self.caller.search(self.args)
+        if not container:
+            return
+        if not utils.inherits_from(
+            container, "typeclasses.liquidobjects.BoilContainer"
+        ):
+            self.caller.msg("You can't boil that!")
+            return
+
+        self.caller.location.msg_contents(container.boil(container, self.caller), from_obj=self.caller, mapping={"boiler": container})
+
 
 class LiquidCmdSet(CmdSet):
-
     def at_cmdset_creation(self):
         self.add(CmdFill)
         self.add(CmdEmpty)
+        self.add(CmdBoil)

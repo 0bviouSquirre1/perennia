@@ -15,8 +15,10 @@ own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 """
 
 from evennia import default_cmds
-from commands import liquid_cmds, plant_cmds
+from commands import liquid_cmds, plant_cmds, basic_cmds, reorg_cmds
 from evennia.contrib.utils.git_integration import GitCmdSet
+from evennia.contrib.rpg.character_creator.character_creator import ContribCmdCharCreate
+
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
@@ -35,9 +37,11 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
-        self.add(liquid_cmds.LiquidCmdSet)
         self.add(GitCmdSet)
+        self.add(liquid_cmds.LiquidCmdSet)
         self.add(plant_cmds.PlantCmdSet)
+        self.add(basic_cmds.BasicCmdSet)
+        self.add(reorg_cmds.HelpCmdSet)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
@@ -58,6 +62,7 @@ class AccountCmdSet(default_cmds.AccountCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
+        self.add(ContribCmdCharCreate)
 
 
 class UnloggedinCmdSet(default_cmds.UnloggedinCmdSet):
