@@ -3,6 +3,7 @@ from evennia import CmdSet, utils
 import inflect
 
 p = inflect.engine()
+liquid_string = "typeclasses.liquidobjects.LiquidContainer"
 
 
 class CmdFill(Command):
@@ -19,8 +20,6 @@ class CmdFill(Command):
     def parse(self):
         self.args = self.args.strip()
         to_container, *from_container = self.args.split(" from ", 1)
-        if not from_container:
-            to_container, *from_container = to_container.split(" ", 1)
         self.to_container = to_container.strip()
         if from_container:
             from_container = from_container[0].strip()
@@ -67,13 +66,10 @@ class CmdFill(Command):
         from_container.transfer(-transfer_amount, liquid)
         to_container.transfer(transfer_amount, liquid)
 
-        # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
         string = ""
         if from_container.db.fill_level < transfer_amount:
-            self.caller.msg("Success Emptied")
             string += f"$You() $conj(get) what $pron(you) can from the now-empty $obj(vessel)."
         else:
-            self.caller.msg("Success")
             string += f"$You() $conj(fill) the $obj(receptacle) from the $obj(vessel)."
         self.caller.location.msg_contents(string, from_obj=self.caller, mapping={
             "receptacle": to_container,
@@ -98,8 +94,6 @@ class CmdEmpty(Command):
     def parse(self):
         self.args = self.args.strip()
         from_container, *to_container = self.args.split(" into ", 1)
-        if not to_container:
-            from_container, *to_container = from_container.split(" ", 1)
         self.from_container = from_container.strip()
         if to_container:
             to_container = to_container[0].strip()
@@ -117,7 +111,7 @@ class CmdEmpty(Command):
         if not from_container:
             return
         if not utils.inherits_from(
-            from_container, "typeclasses.liquidobjects.LiquidContainer"
+            from_container, liquid_string
         ):
             self.caller.msg("You can't empty that!")
             return
@@ -132,25 +126,22 @@ class CmdEmpty(Command):
 
         to_container = self.caller.search(self.to_container, quiet=True)
 
+        string = ""
         if len(to_container) == 1:
             to_container = to_container[0]
-            if utils.inherits_from(
-                to_container, "typeclasses.liquidobjects.LiquidContainer"
-            ):
-                empty = to_container.db.capacity - to_container.db.fill_level
-                to_container.transfer(transfer_amount, liquid)
+            if not utils.inherits_from(to_container, liquid_string):
+                self.caller.msg(f"You cannot pour {liquid} into the {to_container}.")
+                return
+            
+            empty = to_container.db.capacity - to_container.db.fill_level
+            to_container.transfer(transfer_amount, liquid)
 
-                if transfer_amount > empty:
-                    string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
-                    string += f"\nThe rest of the {liquid} splashes all over the ground."
-                    self.caller.msg("Success Spill")
-                else:
-                    self.caller.msg("Success")
-                    string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
+            if transfer_amount > empty:
+                string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
+                string += f"\nThe rest of the {liquid} splashes all over the ground."
             else:
-                self.caller.msg = f"You cannot pour {liquid} into the {to_container}."
+                string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
         else:
-            self.caller.msg("Success Ground")
             string += f"$You() $conj(empty) the $obj(vessel) out on the ground."
 
         self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"receptacle": to_container,"vessel": from_container})
@@ -181,7 +172,7 @@ class CmdBoil(Command):
             self.caller.msg("You can't boil that!")
             return
 
-        self.caller.location.msg_contents(container.boil(container, self.caller), from_obj=self.caller, mapping={"boiler": container})
+        self.caller.location.msg_contents(container.boil(container), from_obj=self.caller, mapping={"boiler": container})
 
 
 class LiquidCmdSet(CmdSet):
