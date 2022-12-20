@@ -5,6 +5,7 @@ from commands import basic_cmds
 
 # TODO: Something like location.msg_contents = MagicMock() and then location.msg_contents.assert_called_with("Foo is putting the tomato in the bucket.") in order to actually check feedback from commands
 
+
 class TestCommands(EvenniaCommandTest):
     def setUp(self):
         super().setUp()
@@ -16,7 +17,7 @@ class TestCommands(EvenniaCommandTest):
 
         self.item.move_to(self.char1)
         self.bucket.move_to(self.room1)
-        
+
         self.bucket.fill_level = 10
         self.bucket.liquid = "water"
 
@@ -33,13 +34,21 @@ class TestCommands(EvenniaCommandTest):
         self.call(basic_cmds.CmdPut(), "", "What do you want to put down?")
 
     def test_put_nowhere(self):
-        self.call(basic_cmds.CmdPut(), f"{self.item}", f"Where did you want to put the {self.item}?")
-    
-    def test_put_from_inv(self):
+        self.call(
+            basic_cmds.CmdPut(),
+            f"{self.item}",
+            f"Where did you want to put the {self.item}?",
+        )
+
+    def test_put_from_inventory(self):
         self.item.move_to(self.char1)
         self.bucket.move_to(self.room1)
 
-        self.call(basic_cmds.CmdPut(), f"{self.item} in {self.bucket}", f"$You() $conj(put) the {self.item} into the {self.bucket}.")
+        self.call(
+            basic_cmds.CmdPut(),
+            f"{self.item} in {self.bucket}",
+            f"You put the {self.item} into the {self.bucket}.",
+        )
 
         self.assertEqual(self.item.location, self.bucket)
 
@@ -47,7 +56,11 @@ class TestCommands(EvenniaCommandTest):
         self.item.move_to(self.room1)
         self.bucket.move_to(self.room1)
 
-        self.call(basic_cmds.CmdPut(), f"{self.item} in {self.bucket}", f"$You() $conj(put) the {self.item} into the {self.bucket}.")
+        self.call(
+            basic_cmds.CmdPut(),
+            f"{self.item} in {self.bucket}",
+            f"You put the {self.item} into the {self.bucket}.",
+        )
 
         self.assertEqual(self.item.location, self.bucket)
 
@@ -64,7 +77,7 @@ class TestCommands(EvenniaCommandTest):
 
     def test_get_nothing(self):
         self.call(basic_cmds.CmdGet(), "", "Get what?")
-    
+
     def test_get_inaccessible(self):
         self.item.locks.add("get:none()")
 
@@ -73,7 +86,11 @@ class TestCommands(EvenniaCommandTest):
     def test_get_from_room(self):
         self.item.move_to(self.room1)
 
-        self.call(basic_cmds.CmdGet(), f"{self.item}", f"$You() $conj(pick) up the {self.item}.")
+        self.call(
+            basic_cmds.CmdGet(),
+            f"{self.item}",
+            f"You pick up the {self.item}.",
+        )
 
         self.assertEqual(self.item.location, self.char1)
 
@@ -81,7 +98,11 @@ class TestCommands(EvenniaCommandTest):
         self.item.move_to(self.bucket)
         self.bucket.move_to(self.room1)
 
-        self.call(basic_cmds.CmdGet(), f"{self.item} from {self.bucket}", f"$You() $conj(retrieve) the {self.item} from the {self.bucket}.")
+        self.call(
+            basic_cmds.CmdGet(),
+            f"{self.item} from {self.bucket}",
+            f"You retrieve the {self.item} from the {self.bucket}.",
+        )
 
         self.assertEqual(self.item.location, self.char1)
 
@@ -92,20 +113,35 @@ class TestCommands(EvenniaCommandTest):
         self.call(basic_cmds.CmdDrink(), f"{self.item}", "You can't drink that!")
 
     def test_drink(self):
-        self.call(basic_cmds.CmdDrink(), f"{self.bucket}", f"$You() $conj(take) a sip from a {self.bucket}.")
+        self.call(
+            basic_cmds.CmdDrink(),
+            f"{self.bucket}",
+            f"You take a sip from a {self.bucket}({self.bucket.dbref}).",
+        )
 
         self.assertEqual(self.bucket.fill_level, 9)
 
     def test_drink_empty(self):
         self.bucket.fill_level = 1
 
-        self.call(basic_cmds.CmdDrink(), f"{self.bucket}", f"$You() $conj(take) a sip from a {self.bucket}. You have emptied {self.bucket}")
+        self.call(
+            basic_cmds.CmdDrink(),
+            f"{self.bucket}",
+            f"You take a sip from a {self.bucket}({self.bucket.dbref}). You have emptied a {self.bucket}({self.bucket.dbref}).",
+        )
 
         self.assertEqual(self.bucket.fill_level, 0)
+
+    def test_eat_nothing(self):
+        self.call(basic_cmds.CmdEat(), "", "Eat what?")
 
     def test_eat(self):
         self.item.move_to(self.char1)
 
-        self.call(basic_cmds.CmdEat(), f"{self.item}", "Success")
+        self.call(
+            basic_cmds.CmdEat(),
+            f"{self.item}",
+            f"You eat a {self.item}({self.item.dbref}) with obvious enthusiasm.",
+        )
 
         self.assertNotEqual(self.item.location, self.char1)

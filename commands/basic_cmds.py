@@ -49,7 +49,6 @@ class CmdPut(Command):
         put_obj.move_to(container, quiet=True)
 
         string = f"$You() $conj(put) the {put_obj} into the {container}."
-        caller.msg(string)
         caller.location.msg_contents(string, from_obj=caller)
 
 
@@ -125,10 +124,8 @@ class CmdGet(Command):
             else:
                 if self.container:
                     string = f"$You() $conj(retrieve) the {obj.name} from the {self.container}."
-                    caller.msg(string)
                 else:
                     string = f"$You() $conj(pick) up the {obj.name}."
-                    caller.msg(string)
                 caller.location.msg_contents(string, from_obj=caller)
                 # calling at_get hook method
                 obj.at_get(caller)
@@ -157,17 +154,15 @@ class CmdDrink(Command):
 
         container = self.caller.search(self.args)
         if not utils.inherits_from(
-                container, "typeclasses.liquidobjects.LiquidContainer"
-            ):
+            container, "typeclasses.liquidobjects.LiquidContainer"
+        ):
             self.caller.msg("You can't drink that!")
             return
-    
+
         string = f"$You() $conj(take) a sip from a $obj(vessel)."
-        self.caller.msg(f"$You() $conj(take) a sip from a {container}")
         container.fill_level -= 1
         if container.fill_level == 0:
-            string += f"You have emptied a $obj(vessel)."
-            self.caller.msg(f"You have emptied a {container}.")
+            string += f" You have emptied a $obj(vessel)."
         self.caller.location.msg_contents(
             string, from_obj=self.caller, mapping={"vessel": container}
         )
@@ -201,7 +196,6 @@ class CmdEat(Command):
                     obj = objec
                     break
         obj = obj[0]
-        self.caller.msg("Success")
         string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
         self.caller.location.msg_contents(
             string, from_obj=self.caller, mapping={"food": obj}
