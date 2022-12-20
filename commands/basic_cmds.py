@@ -9,7 +9,7 @@ class CmdPut(Command):
     Put something in a container.
 
     Usage:
-        PUT <object> IN <container>
+        PUT <object> [IN] <container>
     """
 
     key = "put"
@@ -18,9 +18,11 @@ class CmdPut(Command):
 
     def parse(self):
         self.args = self.args.strip()
+
         put_obj, *container = self.args.split(" in ", 1)
         if not container:
             put_obj, *container = put_obj.split(" ", 1)
+            
         self.put_obj = put_obj.strip()
         if container:
             container = container[0].strip()
@@ -160,7 +162,9 @@ class CmdDrink(Command):
         container.fill_level -= 1
         if container.fill_level == 0:
             string += f"You have emptied {container}"
-        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"vessel": container})
+        self.caller.location.msg_contents(
+            string, from_obj=self.caller, mapping={"vessel": container}
+        )
 
 
 class CmdEat(Command):
@@ -193,7 +197,9 @@ class CmdEat(Command):
         obj = obj[0]
         self.caller.msg("Success")
         string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
-        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"food": obj})
+        self.caller.location.msg_contents(
+            string, from_obj=self.caller, mapping={"food": obj}
+        )
         obj.delete()
 
 

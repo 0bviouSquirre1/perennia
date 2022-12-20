@@ -22,7 +22,6 @@ class TestCommands(EvenniaCommandTest):
         command = basic_cmds.CmdPut()
         command.args = self.command_string
 
-
         command.parse()
 
         self.assertEqual(command.put_obj, "tomato")
