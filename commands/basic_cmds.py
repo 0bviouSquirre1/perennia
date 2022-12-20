@@ -1,5 +1,5 @@
 from commands.command import Command
-from evennia import CmdSet
+from evennia import CmdSet, utils
 
 import inflect
 
@@ -9,7 +9,7 @@ class CmdPut(Command):
     Put something in a container.
 
     Usage:
-        PUT <object> [IN] <container>
+        PUT <object> IN <container>
     """
 
     key = "put"
@@ -22,7 +22,7 @@ class CmdPut(Command):
         put_obj, *container = self.args.split(" in ", 1)
         if not container:
             put_obj, *container = put_obj.split(" ", 1)
-            
+
         self.put_obj = put_obj.strip()
         if container:
             container = container[0].strip()
@@ -48,9 +48,8 @@ class CmdPut(Command):
 
         put_obj.move_to(container, quiet=True)
 
-        # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
-        caller.msg("Success")
         string = f"$You() $conj(put) the {put_obj} into the {container}."
+        caller.msg(string)
         caller.location.msg_contents(string, from_obj=caller)
 
 
@@ -66,7 +65,7 @@ class CmdGet(Command):
     """
 
     key = "get"
-    aliases = "grab"
+    aliases = ["grab", "pick up", "take"]
     help_category = "Interaction"
     locks = "cmd:all();view:perm(Developer);read:perm(Developer)"
     arg_regex = r"\s|$"
@@ -125,11 +124,11 @@ class CmdGet(Command):
                 caller.msg("This can't be picked up.")
             else:
                 if self.container:
-                    caller.msg("Success Container")
                     string = f"$You() $conj(retrieve) the {obj.name} from the {self.container}."
+                    caller.msg(string)
                 else:
-                    caller.msg("Success")
                     string = f"$You() $conj(pick) up the {obj.name}."
+                    caller.msg(string)
                 caller.location.msg_contents(string, from_obj=caller)
                 # calling at_get hook method
                 obj.at_get(caller)
@@ -148,7 +147,7 @@ class CmdDrink(Command):
     """
 
     key = "drink"
-    aliases = "sip"
+    aliases = ["sip", "quaff"]
     help_category = "Interaction"
 
     def func(self):
@@ -157,11 +156,18 @@ class CmdDrink(Command):
             return
 
         container = self.caller.search(self.args)
-        self.caller.msg("Success")
+        if not utils.inherits_from(
+                container, "typeclasses.liquidobjects.LiquidContainer"
+            ):
+            self.caller.msg("You can't drink that!")
+            return
+    
         string = f"$You() $conj(take) a sip from a $obj(vessel)."
+        self.caller.msg(f"$You() $conj(take) a sip from a {container}")
         container.fill_level -= 1
         if container.fill_level == 0:
-            string += f"You have emptied {container}"
+            string += f"You have emptied a $obj(vessel)."
+            self.caller.msg(f"You have emptied a {container}.")
         self.caller.location.msg_contents(
             string, from_obj=self.caller, mapping={"vessel": container}
         )
