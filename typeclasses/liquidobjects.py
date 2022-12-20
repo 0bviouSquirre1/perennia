@@ -37,7 +37,7 @@ class LiquidContainer(Object):
 
 class BoilContainer(LiquidContainer):
 
-    def boil(self, container, caller):
+    def boil(self, container):
         string = ""
         # check for water in kettle
         if container.fill_level != 0:

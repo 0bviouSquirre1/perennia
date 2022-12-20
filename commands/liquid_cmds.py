@@ -70,8 +70,10 @@ class CmdFill(Command):
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
         string = ""
         if from_container.db.fill_level < transfer_amount:
+            self.caller.msg("Success Emptied")
             string += f"$You() $conj(get) what $pron(you) can from the now-empty $obj(vessel)."
         else:
+            self.caller.msg("Success")
             string += f"$You() $conj(fill) the $obj(receptacle) from the $obj(vessel)."
         self.caller.location.msg_contents(string, from_obj=self.caller, mapping={
             "receptacle": to_container,
@@ -141,11 +143,14 @@ class CmdEmpty(Command):
                 if transfer_amount > empty:
                     string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
                     string += f"\nThe rest of the {liquid} splashes all over the ground."
+                    self.caller.msg("Success Spill")
                 else:
+                    self.caller.msg("Success")
                     string += f"$You() $conj(empty) the $obj(vessel) into the $obj(receptacle)."
             else:
                 self.caller.msg = f"You cannot pour {liquid} into the {to_container}."
         else:
+            self.caller.msg("Success Ground")
             string += f"$You() $conj(empty) the $obj(vessel) out on the ground."
 
         self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"receptacle": to_container,"vessel": from_container})

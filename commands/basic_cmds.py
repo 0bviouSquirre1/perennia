@@ -13,7 +13,7 @@ class CmdPut(Command):
     """
 
     key = "put"
-    aliases = "place"
+    aliases = ["place", "set"]
     help_category = "Interaction"
 
     def parse(self):
@@ -44,7 +44,7 @@ class CmdPut(Command):
             return
         container = container[0]
 
-        put_obj.move_to(container)
+        put_obj.move_to(container, quiet=True)
 
         # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
         caller.msg("Success")
@@ -123,10 +123,10 @@ class CmdGet(Command):
                 caller.msg("This can't be picked up.")
             else:
                 if self.container:
-                    caller.msg("Success")
+                    caller.msg("Success Container")
                     string = f"$You() $conj(retrieve) the {obj.name} from the {self.container}."
                 else:
-                    caller.msg("Success Container")
+                    caller.msg("Success")
                     string = f"$You() $conj(pick) up the {obj.name}."
                 caller.location.msg_contents(string, from_obj=caller)
                 # calling at_get hook method
