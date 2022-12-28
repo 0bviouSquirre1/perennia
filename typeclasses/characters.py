@@ -15,8 +15,7 @@ from .objects import ObjectParent
 
 class Character(ObjectParent, DefaultCharacter):
     """
-    The Character defaults to reimplementing some of base Object's hook methods with the
-    following functionality:
+    The Character defaults to reimplementing some of base Object's hook methods with the following functionality:
 
     at_basetype_setup - always assigns the DefaultCmdSet to this object type
                     (important!)sets locks so character cannot be picked up
@@ -24,9 +23,7 @@ class Character(ObjectParent, DefaultCharacter):
                     (to change things, use at_object_creation() instead).
     at_post_move(source_location) - Launches the "look" command after every move.
     at_post_unpuppet(account) -  when Account disconnects from the Character, we
-                    store the current location in the pre_logout_location Attribute and
-                    move it to a None-location so the "unpuppeted" character
-                    object does not need to stay on grid. Echoes "Account has disconnected"
+                    store the current location in the pre_logout_location Attribute and move it to a None-location so the "unpuppeted" character object does not need to stay on grid. Echoes "Account has disconnected"
                     to the room.
     at_pre_puppet - Just before Account re-connects, retrieves the character's
                     pre_logout_location Attribute and move it back on the grid.
@@ -37,24 +34,24 @@ class Character(ObjectParent, DefaultCharacter):
     default_pronouns = ["ey/em/eirs/eirself"]
     pronouns = AttributeProperty(default_pronouns, category="personal")
 
+    def at_object_creation(self):
+        DEFAULT_LOCATION = 'kitchen'
+        self.location = DEFAULT_LOCATION
+        return super().at_object_creation()
+
     def get_display_name(self, looker=None, **kwargs):
         """
         Displays the name of the object in a viewer-aware manner.
 
         Args:
             looker (TypedObject): The object or account that is looking
-                at/getting inforamtion for this object. If not given, `.name` will be
-                returned, which can in turn be used to display colored data.
+            at/getting inforamtion for this object. If not given, `.name` will be returned, which can in turn be used to display colored data.
 
         Returns:
-            str: A name to display for this object. This can contain color codes and may
-                be customized based on `looker`. By default this contains the `.key` of the object,
-                followed by the DBREF if this user is privileged to control said object.
+            str: A name to display for this object. This can contain color codes and may be customized based on `looker`. By default this contains the `.key` of the object, followed by the DBREF if this user is privileged to control said object.
 
         Notes:
-            This function could be extended to change how object names appear to users in character,
-            but be wary. This function does not change an object's keys or aliases when searching,
-            and is expected to produce something useful for builders.
+            This function could be extended to change how object names appear to users in character, but be wary. This function does not change an object's keys or aliases when searching, and is expected to produce something useful for builders.
 
         """
         if looker and self.locks.check_lockstring(looker, "perm(Builder)"):

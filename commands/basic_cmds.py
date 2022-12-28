@@ -13,7 +13,7 @@ class CmdPut(Command):
     """
 
     key = "put"
-    aliases = ["place", "set"]
+    aliases = ["place"]
     help_category = "Interaction"
 
     def parse(self):
