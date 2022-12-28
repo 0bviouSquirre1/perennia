@@ -1,5 +1,5 @@
 from commands.command import Command
-from evennia import CmdSet
+from evennia import CmdSet, utils
 
 import inflect
 
@@ -13,14 +13,16 @@ class CmdPut(Command):
     """
 
     key = "put"
-    aliases = "place"
+    aliases = ["place", "set"]
     help_category = "Interaction"
 
     def parse(self):
         self.args = self.args.strip()
+
         put_obj, *container = self.args.split(" in ", 1)
         if not container:
             put_obj, *container = put_obj.split(" ", 1)
+
         self.put_obj = put_obj.strip()
         if container:
             container = container[0].strip()
@@ -31,7 +33,7 @@ class CmdPut(Command):
     def func(self):
         caller = self.caller
         if not self.args:
-            caller.msg("What do you want to fill?")
+            caller.msg("What do you want to put down?")
             return
 
         put_obj = caller.search(self.put_obj)
@@ -44,9 +46,8 @@ class CmdPut(Command):
             return
         container = container[0]
 
-        put_obj.move_to(container)
+        put_obj.move_to(container, quiet=True)
 
-        # strings are for intended pathways-- self.caller.msg is for error breakouts, I have decided
         string = f"$You() $conj(put) the {put_obj} into the {container}."
         caller.location.msg_contents(string, from_obj=caller)
 
@@ -63,7 +64,7 @@ class CmdGet(Command):
     """
 
     key = "get"
-    aliases = "grab"
+    aliases = ["grab", "pick up", "take"]
     help_category = "Interaction"
     locks = "cmd:all();view:perm(Developer);read:perm(Developer)"
     arg_regex = r"\s|$"
@@ -143,7 +144,7 @@ class CmdDrink(Command):
     """
 
     key = "drink"
-    aliases = "sip"
+    aliases = ["sip", "quaff"]
     help_category = "Interaction"
 
     def func(self):
@@ -152,11 +153,19 @@ class CmdDrink(Command):
             return
 
         container = self.caller.search(self.args)
+        if not utils.inherits_from(
+            container, "typeclasses.liquidobjects.LiquidContainer"
+        ):
+            self.caller.msg("You can't drink that!")
+            return
+
         string = f"$You() $conj(take) a sip from a $obj(vessel)."
         container.fill_level -= 1
         if container.fill_level == 0:
-            string += f"You have emptied {container}"
-        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"vessel": container})
+            string += f" You have emptied a $obj(vessel)."
+        self.caller.location.msg_contents(
+            string, from_obj=self.caller, mapping={"vessel": container}
+        )
 
 
 class CmdEat(Command):
@@ -186,9 +195,11 @@ class CmdEat(Command):
                 if objec.location == self.caller:
                     obj = objec
                     break
-        #obj = obj[0]
+        obj = obj[0]
         string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
-        self.caller.location.msg_contents(string, from_obj=self.caller, mapping={"food": obj})
+        self.caller.location.msg_contents(
+            string, from_obj=self.caller, mapping={"food": obj}
+        )
         obj.delete()
 
 

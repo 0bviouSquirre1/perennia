@@ -25,16 +25,13 @@ class CmdGather(Command):
             self.caller.msg("What do you want to gather?")
             return
 
-        plant = self.caller.search(self.plant, typeclass=plantstring)
+        plant = self.caller.search(self.plant)
         if not plant:
             return
         if not utils.inherits_from(plant, plantstring):
-            self.caller.msg(plant)
             self.caller.msg("You can't gather that!")
             return
 
-        # strings are for intended pathways
-        # self.caller.msg is for error breakouts, I have decided
         string = ""
         produce = plant.produce.replace('_', ' ')
         if plant.produce_counter <= 0:

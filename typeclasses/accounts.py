@@ -93,7 +93,23 @@ class Account(DefaultAccount):
 
     """
 
-    pass
+    ooc_appearance_template = """
+--------------------------------------------------------------------
+{header}
+
+{sessions}
+
+  |whelp|n - more commands
+  |wpublic <text>|n - talk on public channel
+  |wcharcreate|n - create new character
+  |wchardelete <name>|n - delete a character
+  |wic <name>|n - enter the game as character (|wooc|n to get back here)
+  |wic|n - enter the game as latest character controlled.
+
+{characters}
+{footer}
+--------------------------------------------------------------------
+""".strip()
 
 
 class Guest(DefaultGuest):
