@@ -3,9 +3,6 @@ from evennia import prototypes
 from commands import basic_cmds
 
 
-# TODO: Something like location.msg_contents = MagicMock() and then location.msg_contents.assert_called_with("Foo is putting the tomato in the bucket.") in order to actually check feedback from commands
-
-
 class TestCommands(EvenniaCommandTest):
     def setUp(self):
         super().setUp()
