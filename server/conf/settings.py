@@ -35,7 +35,7 @@ from evennia.settings_default import *
 SERVERNAME = "perennia"
 MULTISESSION_MODE = 3
 IN_GAME_ERRORS = False
-ALLOWED_HOSTS = '159.223.163.199'
+ALLOWED_HOSTS = ['159.223.163.199']
 SERVER_HOSTNAME = '159.223.163.199'
 
 
