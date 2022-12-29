@@ -15,7 +15,43 @@ spawn kettle
 spawn cup
 # 
 spawn spoon
+#
+create/drop cupboard
+#
+set cupboard/desc = An old wooden cupboard takes up the far corner.
+#
+tel cupboard
+#
+spawn spoon
+#
+spawn spoon
+#
+spawn spoon
+#
+spawn spoon
+#
+spawn spoon
+#
+spawn spoon
+#
+spawn spoon
 # 
+spawn cup
+#
+spawn cup
+#
+spawn cup
+#
+spawn cup
+#
+spawn cup
+#
+spawn cup
+#
+spawn cup
+#
+tel kitchen
+#
 dig front room = the front room;front room;front;room;r, the kitchen;kitchen;k
 #
 room
