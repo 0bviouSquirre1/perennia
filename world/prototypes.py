@@ -138,6 +138,7 @@ WELL = {
     "capacity": 1000,
     "fill_level": 1000,
     "liquid": "water",
+    "locks": "get:none()"
 }
 BUCKET = {
     "prototype_key": "bucket",

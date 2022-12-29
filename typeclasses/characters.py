@@ -34,11 +34,6 @@ class Character(ObjectParent, DefaultCharacter):
     default_pronouns = ["ey/em/eirs/eirself"]
     pronouns = AttributeProperty(default_pronouns, category="personal")
 
-    def at_object_creation(self):
-        DEFAULT_LOCATION = 'kitchen'
-        self.location = DEFAULT_LOCATION
-        return super().at_object_creation()
-
     def get_display_name(self, looker=None, **kwargs):
         """
         Displays the name of the object in a viewer-aware manner.

@@ -72,8 +72,6 @@ class CmdGet(Command):
     def parse(self):
         self.args = self.args.strip()
         obj, *container = self.args.split(" from ", 1)
-        if not container:
-            obj, *container = obj.split(" ", 1)
         self.obj = obj.strip()
         if container:
             container = container[0].strip()
@@ -87,50 +85,50 @@ class CmdGet(Command):
         caller = self.caller
 
         if not self.args:
-            caller.msg("Get what?")
+            caller.msg("What did you want to get?")
             return
-        # search the caller's location first
-        obj = caller.search(self.obj, location=caller.location, quiet=True)
-        # set the caller as the next location to search
-        if not obj:
-            loc = caller.search(self.container, location=caller.location, quiet=True)
-            obj = caller.search(self.obj, location=loc, quiet=True)
+            
+        container = caller.search(self.container, location=caller.location, quiet=True)
+
+        if not container:
+            container = caller.search(self.container, location=caller, quiet=True)
+        
+        if not container:
+            obj = caller.search(self.obj, location=caller.location)
+            string = f"$You() $conj(pick) up a {self.obj}."
+        else:
+            obj = caller.search(self.obj, location=container)
+            string = f"$You() $conj(get) a {self.obj} from the {container[0]}."
 
         if not obj:
-            loc = caller.search(self.container, location=caller, quiet=True)
-            obj = caller.search(self.obj, location=loc, quiet=True)
-        if not obj:
             return
+
         if caller == obj:
             caller.msg("You can't get yourself.")
             return
 
-        if len(obj) == 1:
-            obj = obj[0]
-
-            if not obj.access(caller, "get"):
-                if obj.db.get_err_msg:
-                    caller.msg(obj.db.get_err_msg)
-                else:
-                    caller.msg("You can't get that.")
-                return
-            # calling at_pre_get hook method
-            if not obj.at_pre_get(caller):
-                return
-
-            success = obj.move_to(caller, quiet=True, move_type="get")
-            if not success:
-                caller.msg("This can't be picked up.")
+        if not obj.access(caller, "get"):
+            if obj.db.get_err_msg:
+                caller.msg(obj.db.get_err_msg)
             else:
-                if self.container:
-                    string = f"$You() $conj(retrieve) the {obj.name} from the {self.container}."
-                else:
-                    string = f"$You() $conj(pick) up the {obj.name}."
-                caller.location.msg_contents(string, from_obj=caller)
-                # calling at_get hook method
-                obj.at_get(caller)
+                caller.msg("You can't get that.")
+            return
+
+        # calling at_pre_get hook method
+        if not obj.at_pre_get(caller):
+            return
+
+        success = obj.move_to(caller, quiet=True, move_type="get")
+        if not success:
+            caller.msg("This can't be picked up.")
         else:
-            pass
+            caller.location.msg_contents(string, from_obj=caller)
+            # calling at_get hook method
+            obj.at_get(caller)
+
+
+
+            
 
 
 class CmdDrink(Command):
