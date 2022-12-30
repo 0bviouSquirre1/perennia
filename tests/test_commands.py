@@ -24,8 +24,8 @@ class TestCommands(EvenniaCommandTest):
 
         command.parse()
 
-        self.assertEqual(command.put_obj, "tomato")
-        self.assertEqual(command.container, "wooden bucket")
+        self.assertEqual(command.lhs, "tomato")
+        self.assertEqual(command.rhs, "wooden bucket")
 
     def test_put_nothing(self):
         self.call(basic_cmds.CmdPut(), "", "What do you want to put down?")
@@ -69,8 +69,8 @@ class TestCommands(EvenniaCommandTest):
 
         command.parse()
 
-        self.assertEqual(command.obj, "tomato")
-        self.assertEqual(command.container, "wooden bucket")
+        self.assertEqual(command.lhs, "tomato")
+        self.assertEqual(command.rhs, "wooden bucket")
 
     def test_get_parser_no_container(self):
         self.item.move_to(self.room1)
@@ -80,8 +80,8 @@ class TestCommands(EvenniaCommandTest):
 
         command.parse()
 
-        self.assertEqual(command.obj, "tomato")
-        self.assertEqual(command.container, None)
+        self.assertEqual(command.lhs, "tomato")
+        self.assertEqual(command.rhs, None)
 
     def test_get_what_isnt_there(self):
         self.call(basic_cmds.CmdGet(), "beachball", "Could not find 'beachball'.")

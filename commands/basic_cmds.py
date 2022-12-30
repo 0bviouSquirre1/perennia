@@ -1,58 +1,63 @@
 from commands.command import Command
+from evennia.commands.default.muxcommand import MuxCommand
 from evennia import CmdSet, utils
 
 import inflect
 
 
-class CmdPut(Command):
+class CmdPut(MuxCommand):
     """
     Put something in a container.
 
     Usage:
         PUT <object> IN <container>
+    
+    Move an object from your inventory (or your location) to a container.
     """
 
     key = "put"
     aliases = ["place"]
     help_category = "Interaction"
 
-    def parse(self):
-        self.args = self.args.strip()
-
-        put_obj, *container = self.args.split(" in ", 1)
-        if not container:
-            put_obj, *container = put_obj.split(" ", 1)
-
-        self.put_obj = put_obj.strip()
-        if container:
-            container = container[0].strip()
-            self.container = container
-        else:
-            self.container = None
+    rhs_split = [" in "]
 
     def func(self):
         caller = self.caller
+        self.put_obj = self.lhs
+        self.container = self.rhs
+
         if not self.args:
             caller.msg("What do you want to put down?")
             return
 
-        put_obj = caller.search(self.put_obj)
-        if not put_obj:
-            return
-
-        container = caller.search(self.container, quiet=True)
+        container = caller.search(self.container, location=caller, quiet=True)
         if not container:
-            caller.msg(f"Where did you want to put the {put_obj}?")
+            container = caller.search(self.container, location=caller.location, quiet=True)
+
+        if not container:
+            caller.msg(f"Where did you want to put the {self.put_obj}?")
             return
+
+        put_obj = caller.search(self.put_obj, location=caller, quiet=True)
+        if not put_obj:
+            put_obj = caller.search(self.put_obj, location=caller.location, quiet=True)
+
+        if not put_obj:
+            caller.msg(f"Could not find '{self.put_obj}'.")
+            return
+
         container = container[0]
+        put_obj = put_obj[0]
 
-        put_obj.move_to(container, quiet=True)
+        success = put_obj.move_to(container, quiet=True)
+        if not success:
+            caller.msg("You can't do that.")
+        else:
+            string = f"$You() $conj(put) the {put_obj} into the {container}."
+            caller.location.msg_contents(string, from_obj=caller)
 
-        string = f"$You() $conj(put) the {put_obj} into the {container}."
-        caller.location.msg_contents(string, from_obj=caller)
 
-
-class CmdGet(Command):
+class CmdGet(MuxCommand):
     """
     Pick something up.
 
@@ -66,46 +71,42 @@ class CmdGet(Command):
     key = "get"
     aliases = ["grab", "pick up", "take"]
     help_category = "Interaction"
-    locks = "cmd:all();view:perm(Developer);read:perm(Developer)"
     arg_regex = r"\s|$"
 
-    def parse(self):
-        self.args = self.args.strip()
-        obj, *container = self.args.split(" from ", 1)
-        self.obj = obj.strip()
-        if container:
-            container = container[0].strip()
-            self.container = container
-        else:
-            self.container = None
+    rhs_split = [" from "]
 
     def func(self):
-        """implements the command."""
-
         caller = self.caller
+        self.obj = self.lhs
+        self.container = self.rhs
 
         if not self.args:
             caller.msg("What did you want to get?")
             return
-            
+
         container = caller.search(self.container, location=caller.location, quiet=True)
 
         if not container:
             container = caller.search(self.container, location=caller, quiet=True)
-        
+
         if not container:
-            obj = caller.search(self.obj, location=caller.location)
+            location = caller.location
             string = f"$You() $conj(pick) up a {self.obj}."
         else:
-            obj = caller.search(self.obj, location=container)
+            location = container
             string = f"$You() $conj(get) a {self.obj} from the {container[0]}."
 
+        obj = caller.search(self.obj, location=location, quiet=True)
+
         if not obj:
+            caller.msg(f"Could not find '{self.obj}'.")
             return
 
         if caller == obj:
             caller.msg("You can't get yourself.")
             return
+
+        obj = obj[0]
 
         if not obj.access(caller, "get"):
             if obj.db.get_err_msg:
@@ -125,10 +126,6 @@ class CmdGet(Command):
             caller.location.msg_contents(string, from_obj=caller)
             # calling at_get hook method
             obj.at_get(caller)
-
-
-
-            
 
 
 class CmdDrink(Command):

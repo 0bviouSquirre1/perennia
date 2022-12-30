@@ -36,7 +36,7 @@ SERVERNAME = "perennia"
 MULTISESSION_MODE = 3
 IN_GAME_ERRORS = False
 SERVER_HOSTNAME = '159.223.163.199'
-
+WEBSOCKET_CLIENT_INTERFACE = '159.223.163.199'
 
 
 ######################################################################
