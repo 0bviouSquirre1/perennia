@@ -8,3 +8,5 @@ First off, thank you for taking the time to test Perennia! It really takes a vil
 
 Known errors:
 WARNING -  Overwriting existing registered function stopWordFilter
+Need to automatically select first available object when multiples
+Improve listing of items in other items

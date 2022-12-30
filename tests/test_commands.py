@@ -24,8 +24,8 @@ class TestCommands(EvenniaCommandTest):
 
         command.parse()
 
-        self.assertEqual(command.put_obj, "tomato")
-        self.assertEqual(command.container, "wooden bucket")
+        self.assertEqual(command.lhs, "tomato")
+        self.assertEqual(command.rhs, "wooden bucket")
 
     def test_put_nothing(self):
         self.call(basic_cmds.CmdPut(), "", "What do you want to put down?")
@@ -69,14 +69,34 @@ class TestCommands(EvenniaCommandTest):
 
         command.parse()
 
-        self.assertEqual(command.obj, "tomato")
-        self.assertEqual(command.container, "wooden bucket")
+        self.assertEqual(command.lhs, "tomato")
+        self.assertEqual(command.rhs, "wooden bucket")
+
+    def test_get_parser_no_container(self):
+        self.item.move_to(self.room1)
+
+        command = basic_cmds.CmdGet()
+        command.args = f"{self.item}"
+
+        command.parse()
+
+        self.assertEqual(command.lhs, "tomato")
+        self.assertEqual(command.rhs, None)
+
+    def test_get_what_isnt_there(self):
+        self.call(basic_cmds.CmdGet(), "beachball", "Could not find 'beachball'.")
+
+    def test_get_fails_when_obj_in_inventory(self):
+        self.item.move_to(self.char1)
+
+        self.call(basic_cmds.CmdGet(), f"{self.item}", f"Could not find '{self.item}'.")
 
     def test_get_nothing(self):
-        self.call(basic_cmds.CmdGet(), "", "Get what?")
+        self.call(basic_cmds.CmdGet(), "", "What did you want to get?")
 
     def test_get_inaccessible(self):
-        self.item.locks.add("get:none()")
+        self.item = prototypes.spawner.spawn("well")[0]
+        self.item.move_to(self.room1)
 
         self.call(basic_cmds.CmdGet(), f"{self.item}", "You can't get that.")
 
@@ -86,19 +106,31 @@ class TestCommands(EvenniaCommandTest):
         self.call(
             basic_cmds.CmdGet(),
             f"{self.item}",
-            f"You pick up the {self.item}.",
+            f"You pick up a {self.item}.",
         )
 
         self.assertEqual(self.item.location, self.char1)
 
-    def test_get_from_container(self):
+    def test_get_from_container_in_room(self):
         self.item.move_to(self.bucket)
         self.bucket.move_to(self.room1)
 
         self.call(
             basic_cmds.CmdGet(),
             f"{self.item} from {self.bucket}",
-            f"You retrieve the {self.item} from the {self.bucket}.",
+            f"You get a {self.item} from the {self.bucket}.",
+        )
+
+        self.assertEqual(self.item.location, self.char1)
+
+    def test_get_from_container_in_inventory(self):
+        self.item.move_to(self.bucket)
+        self.bucket.move_to(self.char1)
+
+        self.call(
+            basic_cmds.CmdGet(),
+            f"{self.item} from {self.bucket}",
+            f"You get a {self.item} from the {self.bucket}.",
         )
 
         self.assertEqual(self.item.location, self.char1)
