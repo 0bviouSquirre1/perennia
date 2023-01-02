@@ -33,7 +33,6 @@ class CmdFill(MuxCommand):
         to_container = caller.search(self.to_container)
         if not to_container:
             return
-        caller.execute_cmd(f"get {to_container}")    
         if not isinstance(to_container, LiquidContainer):
             self.caller.msg("You can't fill that!")
             return
@@ -100,7 +99,6 @@ class CmdEmpty(MuxCommand):
         from_container = caller.search(self.from_container, location=caller, quiet=True)
         if not from_container:
             from_container = caller.search(self.from_container, location=caller.location)
-            return
         if not isinstance(from_container, LiquidContainer):
             caller.msg("You can't empty that!")
             return
