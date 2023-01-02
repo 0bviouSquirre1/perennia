@@ -1,8 +1,8 @@
 from commands.command import Command
 from evennia.commands.default.muxcommand import MuxCommand
-from evennia import CmdSet, utils
-
-import inflect
+from evennia import CmdSet
+from typeclasses.plantobjects import HarvestableObject
+from typeclasses.liquidobjects import LiquidContainer
 
 
 class CmdPut(MuxCommand):
@@ -157,9 +157,7 @@ class CmdDrink(MuxCommand):
 
         container = container[0]
 
-        if not utils.inherits_from(
-            container, "typeclasses.liquidobjects.LiquidContainer"
-        ):
+        if not isinstance(container, LiquidContainer):
             caller.msg("You can't drink that!")
             return
 
@@ -206,9 +204,14 @@ class CmdEat(Command):
             return
 
         obj = obj[0]
+
+        if not isinstance(obj, HarvestableObject):
+            caller.msg("That's not edible!")
+            return
+
         string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
-        self.caller.location.msg_contents(
-            string, from_obj=self.caller, mapping={"food": obj}
+        caller.location.msg_contents(
+            string, from_obj=caller, mapping={"food": obj}
         )
         obj.delete()
 
