@@ -270,11 +270,10 @@ class CmdGive(MuxCommand):
         if not success:
             caller.msg(f"You could not give {singular} to {target.key}.")
         else:
-            caller.msg(f"You give {singular} to {target.key}.")
             target.msg(f"{caller.key} gives you {singular}.")
             # Call the object script's at_give() method.
             to_give.at_give(caller, target)
-            caller.location.msg_contents(f"$You() $conj(give) {singular} to $Obj(target).", from_obj=caller, mapping={"target": target.key})
+            caller.location.msg_contents(f"$You() $conj(give) {singular} to $Obj(target).", from_obj=caller, mapping={"target": target.key}, exclude=target)
 
 
 class BasicCmdSet(CmdSet):
