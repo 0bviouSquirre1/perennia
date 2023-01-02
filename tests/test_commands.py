@@ -186,7 +186,7 @@ class TestDrinkCommands(EvenniaCommandTest):
         self.call(
             basic_cmds.CmdDrink(),
             f"{self.bucket}",
-            f"You take a sip from a {self.bucket}({self.bucket.dbref}). You have emptied a {self.bucket}({self.bucket.dbref}).",
+            f"You take a sip from a {self.bucket}({self.bucket.dbref}). This empties a {self.bucket}({self.bucket.dbref}).",
         )
 
         self.assertEqual(self.bucket.fill_level, 0)
@@ -197,7 +197,7 @@ class TestDrinkCommands(EvenniaCommandTest):
         self.call(
             basic_cmds.CmdDrink(),
             f"{self.bucket}",
-            f"You can't drink from an empty {self.bucket}({self.bucket.dbref})."
+            f"You can't drink from an empty {self.bucket}."
         )
 
         self.assertEqual(self.bucket.fill_level, 0)

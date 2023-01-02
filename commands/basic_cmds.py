@@ -128,7 +128,7 @@ class CmdGet(MuxCommand):
             obj.at_get(caller)
 
 
-class CmdDrink(Command):
+class CmdDrink(MuxCommand):
     """
     Consume a liquid of your choice.
 
@@ -139,7 +139,7 @@ class CmdDrink(Command):
     """
 
     key = "drink"
-    aliases = ["sip", "quaff"]
+    aliases = ["sip", "quaff", "drink from"]
     help_category = "Interaction"
 
     def func(self):
@@ -149,7 +149,10 @@ class CmdDrink(Command):
             caller.msg("Drink what?")
             return
 
-        container = caller.search(self.args, location=caller, quiet=True)
+        container = caller.search(self.args)
+
+        if not container:
+            caller.msg("Drink what?")
 
         if not utils.inherits_from(
             container, "typeclasses.liquidobjects.LiquidContainer"
@@ -158,14 +161,14 @@ class CmdDrink(Command):
             return
 
         if container.fill_level == 0:
-            caller.msg(f"You can't drink from an empty {self.container}.")
+            caller.msg(f"You can't drink from an empty {container}.")
         else:
             container.transfer(-1, container.liquid)
 
             string = f"$You() $conj(take) a sip from a $obj(vessel)."
 
             if container.fill_level == 0:
-                string += f" $You() $conj(empty) a $obj(vessel)."
+                string += f" This empties a $obj(vessel)."
 
             caller.location.msg_contents(
                 string, from_obj=caller, mapping={"vessel": container}
