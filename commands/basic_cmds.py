@@ -191,11 +191,7 @@ class CmdEat(Command):
 
         if not obj:
             return
-        #if len(obj) > 1:
-        #    for objec in obj:
-        #        if objec.location == self.caller:
-        #            obj = objec
-        #            break
+
         obj = obj[0]
         string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
         self.caller.location.msg_contents(
