@@ -239,4 +239,4 @@ class TestGiveCommands(EvenniaCommandTest):
         self.item.move_to(self.char1)
     
     def test_give_location(self):
-        self.call(basic_cmds.CmdGive(), f"{self.item} to {self.char2}", "") 
+        self.call(basic_cmds.CmdGive(), f"{self.item} to {self.char2}", f"You give a {self.item} to {self.char2}.") 
