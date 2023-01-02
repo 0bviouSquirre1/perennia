@@ -110,7 +110,7 @@ class TestEmptyCommands(EvenniaCommandTest):
 
         self.call(
             liquid_cmds.CmdEmpty(),
-            f"{self.kettle} into {self.well}",
+            f"{self.kettle} into {self.bucket}",
             f"You empty the {self.kettle}({self.kettle.dbref}) into the {self.bucket}({self.bucket.dbref}).",
         )
 
