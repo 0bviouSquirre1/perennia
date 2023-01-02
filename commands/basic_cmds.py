@@ -1,4 +1,3 @@
-from commands.command import Command
 from evennia.commands.default.muxcommand import MuxCommand
 from evennia import CmdSet
 from typeclasses.plantobjects import HarvestableObject
