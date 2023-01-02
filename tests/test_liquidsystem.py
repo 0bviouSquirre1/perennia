@@ -180,6 +180,16 @@ class TestEmptyCommands(EvenniaCommandTest):
 
         self.assertEqual(self.kettle.fill_level, 0)
 
+class TestBoilCommands(EvenniaCommandTest):
+    def setUp(self):
+        super().setUp()
+        self.well = prototypes.spawner.spawn("well")[0]
+        self.kettle = prototypes.spawner.spawn("kettle")[0]
+        self.kettle.liquid = "water"
+        self.kettle.move_to(self.room1)
+        self.well.move_to(self.room1)
+        self.fill_string = f"{self.kettle} from {self.well}"
+
     def test_boil_nothing(self):
         self.call(liquid_cmds.CmdBoil(), "", "What do you want to boil?")
 

@@ -1,7 +1,7 @@
 from evennia.commands.default.muxcommand import MuxCommand
 from commands.command import Command
 from evennia import CmdSet, utils
-from typeclasses.liquidobjects import LiquidContainer
+from typeclasses.liquidobjects import LiquidContainer, BoilContainer
 
 import inflect
 
@@ -133,10 +133,13 @@ class CmdEmpty(MuxCommand):
         else:
             string += f"$You() $conj(empty) the $obj(vessel) out on the ground."
 
-        caller.location.msg_contents(string, from_obj=caller, mapping={"receptacle": to_container,"vessel": from_container})
+        caller.location.msg_contents(
+            string,
+            from_obj=caller,
+            mapping={"receptacle": to_container,"vessel": from_container})
 
 
-class CmdBoil(Command):
+class CmdBoil(MuxCommand):
     """
     Put the kettle on to boil.
 
@@ -148,20 +151,23 @@ class CmdBoil(Command):
     help_category = "Interaction"
 
     def func(self):
+        caller = self.caller
+
         if not self.args:
-            self.caller.msg("What do you want to boil?")
+            caller.msg("What do you want to boil?")
             return
 
         container = self.caller.search(self.args)
         if not container:
             return
-        if not utils.inherits_from(
-            container, "typeclasses.liquidobjects.BoilContainer"
-        ):
-            self.caller.msg("You can't boil that!")
+        if not isinstance(container, BoilContainer):
+            caller.msg("You can't boil that!")
             return
 
-        self.caller.location.msg_contents(container.boil(container), from_obj=self.caller, mapping={"boiler": container})
+        caller.location.msg_contents(
+            container.boil(container),
+            from_obj=caller,
+            mapping={"boiler": container})
 
 
 class LiquidCmdSet(CmdSet):
