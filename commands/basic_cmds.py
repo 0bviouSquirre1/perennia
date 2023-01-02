@@ -149,10 +149,13 @@ class CmdDrink(MuxCommand):
             caller.msg("Drink what?")
             return
 
-        container = caller.search(self.args)
+        container = caller.search(self.args, quiet=True)
 
         if not container:
-            caller.msg("Drink what?")
+            caller.msg(f"I cannot find that.")
+            return
+
+        container = container[0]
 
         if not utils.inherits_from(
             container, "typeclasses.liquidobjects.LiquidContainer"
@@ -199,6 +202,7 @@ class CmdEat(Command):
         obj = self.caller.search(self.args, location=caller, quiet=True)
 
         if not obj:
+            caller.msg(f"You cannot eat that.")
             return
 
         obj = obj[0]
