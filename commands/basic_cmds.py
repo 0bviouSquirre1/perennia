@@ -143,23 +143,26 @@ class CmdDrink(Command):
     help_category = "Interaction"
 
     def func(self):
+        caller = self.caller
+
         if not self.args:
-            self.caller.msg("Drink what?")
+            caller.msg("Drink what?")
             return
 
-        container = self.caller.search(self.args)
+        container = caller.search(self.args, location=caller, quiet=True)
+
         if not utils.inherits_from(
             container, "typeclasses.liquidobjects.LiquidContainer"
         ):
-            self.caller.msg("You can't drink that!")
+            caller.msg("You can't drink that!")
             return
 
         string = f"$You() $conj(take) a sip from a $obj(vessel)."
         container.fill_level -= 1
         if container.fill_level == 0:
             string += f" You have emptied a $obj(vessel)."
-        self.caller.location.msg_contents(
-            string, from_obj=self.caller, mapping={"vessel": container}
+        caller.location.msg_contents(
+            string, from_obj=caller, mapping={"vessel": container}
         )
 
 
@@ -174,22 +177,25 @@ class CmdEat(Command):
     """
 
     key = "eat"
-    aliases = "munch"
+    aliases = ["munch"]
     help_category = "Interaction"
 
     def func(self):
+        caller = self.caller
+
         if not self.args:
-            self.caller.msg("Eat what?")
+            caller.msg("Eat what?")
             return
 
-        obj = self.caller.search(self.args, quiet=True)
+        obj = self.caller.search(self.args, location=caller, quiet=True)
+
         if not obj:
             return
-        if len(obj) > 1:
-            for objec in obj:
-                if objec.location == self.caller:
-                    obj = objec
-                    break
+        #if len(obj) > 1:
+        #    for objec in obj:
+        #        if objec.location == self.caller:
+        #            obj = objec
+        #            break
         obj = obj[0]
         string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
         self.caller.location.msg_contents(
