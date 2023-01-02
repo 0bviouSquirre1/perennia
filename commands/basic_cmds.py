@@ -176,7 +176,7 @@ class CmdDrink(MuxCommand):
             )
 
 
-class CmdEat(Command):
+class CmdEat(MuxCommand):
     """
     Consume a food of your choice.
 
@@ -216,9 +216,71 @@ class CmdEat(Command):
         obj.delete()
 
 
+class CmdGive(MuxCommand):
+    """
+    Give something to someone else
+
+    Usage:
+      GIVE <object> TO <target>
+
+    Gives an item from your inventory to another person,
+    placing it in their inventory.
+    """
+
+    key = "give"
+    rhs_split = [" to "]
+    locks = "cmd:all()"
+    arg_regex = r"\s|$"
+    help_category = "Interaction"
+
+    def func(self):
+        """Implement give"""
+
+        caller = self.caller
+        if not self.args or not self.rhs:
+            caller.msg("Usage: GIVE <inventory object> TO <target>")
+            return
+
+        to_give = caller.search(
+            self.lhs,
+            location=caller,
+            nofound_string=f"You aren't carrying {self.lhs}.",
+            multimatch_string=f"You carry more than one {self.lhs}:",
+        )
+
+        target = caller.search(self.rhs)
+        if not (to_give and target):
+            return
+
+        singular, _ = to_give.get_numbered_name(1, caller)
+        if target == caller:
+            caller.msg(f"You keep {singular} to yourself.")
+            return
+
+        if not to_give.location == caller:
+            caller.msg(f"You are not holding {singular}.")
+            return
+
+        # calling at_pre_give hook method
+        if not to_give.at_pre_give(caller, target):
+            return
+
+        # give object
+        success = to_give.move_to(target, quiet=True, move_type="give")
+        if not success:
+            caller.msg(f"You could not give {singular} to {target.key}.")
+        else:
+            caller.msg(f"You give {singular} to {target.key}.")
+            target.msg(f"{caller.key} gives you {singular}.")
+            # Call the object script's at_give() method.
+            to_give.at_give(caller, target)
+            caller.location.msg_contents(f"$You() $conj(give) {singular} to $Obj(target).", from_obj=caller, mapping={"target": target.key})
+
+
 class BasicCmdSet(CmdSet):
     def at_cmdset_creation(self):
         self.add(CmdPut)
         self.add(CmdGet)
         self.add(CmdDrink)
         self.add(CmdEat)
+        self.add(CmdGive)

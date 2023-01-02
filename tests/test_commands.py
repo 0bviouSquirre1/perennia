@@ -230,3 +230,13 @@ class TestEatCommands(EvenniaCommandTest):
         )
 
         self.assertNotEqual(self.item.location, self.char1)
+
+class TestGiveCommands(EvenniaCommandTest):
+    def setUp(self):
+        super().setUp()
+
+        self.item = prototypes.spawner.spawn("tomato")[0]
+        self.item.move_to(self.char1)
+    
+    def test_give_location(self):
+        self.call(basic_cmds.CmdGive(), f"{self.item} to {self.char2}", "") 
