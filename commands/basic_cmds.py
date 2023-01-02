@@ -157,13 +157,19 @@ class CmdDrink(Command):
             caller.msg("You can't drink that!")
             return
 
-        string = f"$You() $conj(take) a sip from a $obj(vessel)."
-        container.fill_level -= 1
         if container.fill_level == 0:
-            string += f" You have emptied a $obj(vessel)."
-        caller.location.msg_contents(
-            string, from_obj=caller, mapping={"vessel": container}
-        )
+            caller.msg(f"You can't drink from an empty {self.container}.")
+        else:
+            container.transfer(-1, container.liquid)
+
+            string = f"$You() $conj(take) a sip from a $obj(vessel)."
+
+            if container.fill_level == 0:
+                string += f" $You() $conj(empty) a $obj(vessel)."
+
+            caller.location.msg_contents(
+                string, from_obj=caller, mapping={"vessel": container}
+            )
 
 
 class CmdEat(Command):
