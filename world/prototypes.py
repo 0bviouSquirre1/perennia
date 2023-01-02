@@ -60,6 +60,7 @@ MINT = {
     "desc": "a square-stemmed mint plant",
     "produce": "mint_leaf",
     "aliases": ("mint", "plant"),
+    "locks": "get:not perm(Player)"
 }
 TOMATO_PLANT = {
     "prototype_key": "tomato_plant",
@@ -68,6 +69,7 @@ TOMATO_PLANT = {
     "desc": "a low, bushy tomato plant",
     "produce": "tomato",
     "aliases": ("tomato", "bush", "plant"),
+    "locks": "get:not perm(Player)"
 }
 SUNFLOWER = {
     "prototype_key": "sunflower_plant",
@@ -77,6 +79,7 @@ SUNFLOWER = {
     "long_name": "Following the passage of the sun intently, a sunflower plant grows here.",
     "produce": "sunflower_seed",
     "aliases": ("flower", "sunflower", "plant"),
+    "locks": "get:not perm(Player)"
 }
 THYME = {
     "prototype_key": "thyme_plant",
@@ -85,6 +88,7 @@ THYME = {
     "desc": "a fragrant thyme plant",
     "produce": "thyme_leaf",
     "aliases": ("thyme", "plant"),
+    "locks": "get:not perm(Player)"
 }
 NIGHTSHADE = {
     "prototype_key": "nightshade_plant",
@@ -93,6 +97,7 @@ NIGHTSHADE = {
     "desc": "a menacing-looking nightshade plant",
     "produce": "nightshade_berry",
     "aliases": ("nightshade", "plant"),
+    "locks": "get:not perm(Player)"
 }
 # endregion
 
@@ -138,7 +143,7 @@ WELL = {
     "capacity": 1000,
     "fill_level": 1000,
     "liquid": "water",
-    "locks": "get:none()"
+    "locks": "get:not perm(Player)"
 }
 BUCKET = {
     "prototype_key": "bucket",
@@ -157,6 +162,7 @@ KETTLE = {
     "capacity": 20,
     "fill_level": 0,
     "liquid": None,
+    "locks": "get:not perm(Player)"
 }
 CUP = {
     "prototype_key": "cup",

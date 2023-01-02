@@ -3,7 +3,7 @@ from evennia.utils.test_resources import EvenniaTest, EvenniaCommandTest
 from commands import liquid_cmds
 
 
-class TestLiquidCommands(EvenniaCommandTest):
+class TestFillCommands(EvenniaCommandTest):
     def setUp(self):
         super().setUp()
         self.well = prototypes.spawner.spawn("well")[0]
@@ -19,8 +19,8 @@ class TestLiquidCommands(EvenniaCommandTest):
 
         command.parse()
 
-        self.assertEqual(command.to_container, "iron kettle")
-        self.assertEqual(command.from_container, "stone well")
+        self.assertEqual(command.lhs, "iron kettle")
+        self.assertEqual(command.rhs, "stone well")
 
     def test_fill_parser_no_from_container(self):
         command = liquid_cmds.CmdFill()
@@ -28,8 +28,8 @@ class TestLiquidCommands(EvenniaCommandTest):
 
         command.parse()
 
-        self.assertEqual(command.to_container, "iron kettle")
-        self.assertEqual(command.from_container, None)
+        self.assertEqual(command.lhs, "iron kettle")
+        self.assertEqual(command.rhs, None)
 
     def test_fill_nothing(self):
         self.call(liquid_cmds.CmdFill(), "", "What do you want to fill?")
@@ -93,31 +93,29 @@ class TestLiquidCommands(EvenniaCommandTest):
         self.assertEqual(self.kettle.fill_level, 15)
         self.assertEqual(self.well.fill_level, 0)
 
-    def test_empty_parser(self):
-        command = liquid_cmds.CmdEmpty()
-        command.args = f"{self.kettle} into {self.well}"
+class TestEmptyCommands(EvenniaCommandTest):
+    def setUp(self):
+        super().setUp()
+        self.bucket = prototypes.spawner.spawn("bucket")[0]
+        self.kettle = prototypes.spawner.spawn("kettle")[0]
+        self.kettle.liquid = "water"
+        self.bucket.liquid = "water"
+        self.kettle.move_to(self.room1)
+        self.bucket.move_to(self.room1)
+        self.fill_string = f"{self.kettle} from {self.bucket}"
 
-        command.parse()
+    def test_empty(self):
+        self.kettle.fill_level = 20
+        self.bucket.fill_level = 50
 
-        self.assertEqual(command.from_container, "iron kettle")
-        self.assertEqual(command.to_container, "stone well")
+        self.call(
+            liquid_cmds.CmdEmpty(),
+            f"{self.kettle} into {self.bucket}",
+            f"You empty the {self.kettle}({self.kettle.dbref}) into the {self.bucket}({self.bucket.dbref}).",
+        )
 
-    def test_empty_parser_ground(self):
-        command = liquid_cmds.CmdEmpty()
-        command.args = f"{self.kettle}"
-
-        command.parse()
-
-        self.assertEqual(command.from_container, "iron kettle")
-
-    def test_empty_nothing(self):
-        self.call(liquid_cmds.CmdEmpty(), "", "What do you want to empty?")
-
-    def test_empty_unemptyable(self):
-        self.tomato = prototypes.spawner.spawn("tomato")[0]
-        self.tomato.move_to(self.char1)
-
-        self.call(liquid_cmds.CmdEmpty(), f"{self.tomato}", "You can't empty that!")
+        self.assertEqual(self.kettle.fill_level, 0)
+        self.assertEqual(self.bucket.fill_level, 70)
 
     def test_empty_empty(self):
         self.call(
@@ -125,6 +123,17 @@ class TestLiquidCommands(EvenniaCommandTest):
             f"{self.kettle}",
             f"The {self.kettle} is already empty!",
         )
+
+    def test_empty_ground(self):
+        self.kettle.fill_level = 20
+
+        self.call(
+            liquid_cmds.CmdEmpty(),
+            f"{self.kettle}",
+            f"You empty the {self.kettle}({self.kettle.dbref}) out on the ground.",
+        )
+
+        self.assertEqual(self.kettle.fill_level, 0)
 
     def test_empty_into_unfillable(self):
         self.tomato = prototypes.spawner.spawn("tomato")[0]
@@ -138,36 +147,54 @@ class TestLiquidCommands(EvenniaCommandTest):
             f"You cannot pour {self.kettle.liquid} into the {self.tomato}.",
         )
 
+    def test_empty_nothing(self):
+        self.call(liquid_cmds.CmdEmpty(), "", "What do you want to empty?")
+
     def test_empty_overflow(self):
-        self.call(
-            liquid_cmds.CmdEmpty(),
-            f"{self.well} into {self.kettle}",
-            f"You empty the {self.well}({self.well.dbref}) into the {self.kettle}({self.kettle.dbref}).\nThe rest of the {self.kettle.liquid} splashes all over the ground.",
-        )
-
-    def test_empty(self):
-        self.kettle.fill_level = 20
-        self.well.fill_level = 500
+        self.bucket.fill_level = 100
 
         self.call(
             liquid_cmds.CmdEmpty(),
-            f"{self.kettle} into {self.well}",
-            f"You empty the {self.kettle}({self.kettle.dbref}) into the {self.well}({self.well.dbref}).",
+            f"{self.bucket} into {self.kettle}",
+            f"You empty the {self.bucket}({self.bucket.dbref}) into the {self.kettle}({self.kettle.dbref}).\nThe rest of the {self.kettle.liquid} splashes all over the ground.",
         )
 
-        self.assertEqual(self.kettle.fill_level, 0)
-        self.assertEqual(self.well.fill_level, 520)
+        self.assertEqual(self.kettle.fill_level, 20)
+        self.assertEqual(self.bucket.fill_level, 0)
 
-    def test_empty_ground(self):
-        self.kettle.fill_level = 20
+    def test_empty_parser(self):
+        command = liquid_cmds.CmdEmpty()
+        command.args = f"{self.kettle} into {self.bucket}"
 
-        self.call(
-            liquid_cmds.CmdEmpty(),
-            f"{self.kettle}",
-            f"You empty the {self.kettle}({self.kettle.dbref}) out on the ground.",
-        )
+        command.parse()
 
-        self.assertEqual(self.kettle.fill_level, 0)
+        self.assertEqual(command.lhs, "iron kettle")
+        self.assertEqual(command.rhs, "wooden bucket")
+
+    def test_empty_parser_ground(self):
+        command = liquid_cmds.CmdEmpty()
+        command.args = f"{self.kettle}"
+
+        command.parse()
+
+        self.assertEqual(command.lhs, "iron kettle")
+        self.assertEqual(command.rhs, None)
+
+    def test_empty_unemptyable(self):
+        self.tomato = prototypes.spawner.spawn("tomato")[0]
+        self.tomato.move_to(self.char1)
+
+        self.call(liquid_cmds.CmdEmpty(), f"{self.tomato}", "You can't empty that!")
+
+class TestBoilCommands(EvenniaCommandTest):
+    def setUp(self):
+        super().setUp()
+        self.well = prototypes.spawner.spawn("well")[0]
+        self.kettle = prototypes.spawner.spawn("kettle")[0]
+        self.kettle.liquid = "water"
+        self.kettle.move_to(self.room1)
+        self.well.move_to(self.room1)
+        self.fill_string = f"{self.kettle} from {self.well}"
 
     def test_boil_nothing(self):
         self.call(liquid_cmds.CmdBoil(), "", "What do you want to boil?")
