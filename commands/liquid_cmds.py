@@ -96,12 +96,12 @@ class CmdEmpty(MuxCommand):
             caller.msg("What do you want to empty?")
             return
 
-        from_container = caller.search(self.from_container)
+        from_container = caller.search(self.from_container, location=caller, quiet=True)
         if not from_container:
+            from_container = caller.search(self.from_container, location=caller.location)
+            from_container.move_to(caller, quiet=True, move_type="get")
             return
-        if not utils.inherits_from(
-            from_container, liquid_string
-        ):
+        if not isinstance(from_container, LiquidContainer):
             caller.msg("You can't empty that!")
             return
 
