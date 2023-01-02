@@ -3,7 +3,7 @@ from evennia import prototypes
 from commands import basic_cmds
 
 
-class TestCommands(EvenniaCommandTest):
+class TestPutCommands(EvenniaCommandTest):
     def setUp(self):
         super().setUp()
 
@@ -60,6 +60,21 @@ class TestCommands(EvenniaCommandTest):
         )
 
         self.assertEqual(self.item.location, self.bucket)
+
+class TestGetCommands(EvenniaCommandTest):
+    def setUp(self):
+        super().setUp()
+
+        self.item = prototypes.spawner.spawn("tomato")[0]
+        self.bucket = prototypes.spawner.spawn("bucket")[0]
+
+        self.put_string = f"{self.item} in {self.bucket}"
+
+        self.item.move_to(self.char1)
+        self.bucket.move_to(self.room1)
+
+        self.bucket.fill_level = 10
+        self.bucket.liquid = "water"
 
     def test_get_parser(self):
         self.item.move_to(self.bucket)
@@ -135,6 +150,21 @@ class TestCommands(EvenniaCommandTest):
 
         self.assertEqual(self.item.location, self.char1)
 
+class TestDrinkCommands(EvenniaCommandTest):
+    def setUp(self):
+        super().setUp()
+
+        self.item = prototypes.spawner.spawn("tomato")[0]
+        self.bucket = prototypes.spawner.spawn("bucket")[0]
+
+        self.put_string = f"{self.item} in {self.bucket}"
+
+        self.item.move_to(self.char1)
+        self.bucket.move_to(self.room1)
+
+        self.bucket.fill_level = 10
+        self.bucket.liquid = "water"
+
     def test_drink_nothing(self):
         self.call(basic_cmds.CmdDrink(), "", "Drink what?")
 
@@ -150,7 +180,7 @@ class TestCommands(EvenniaCommandTest):
 
         self.assertEqual(self.bucket.fill_level, 9)
 
-    def test_drink_empty(self):
+    def test_drink_to_empty(self):
         self.bucket.fill_level = 1
 
         self.call(
@@ -160,6 +190,32 @@ class TestCommands(EvenniaCommandTest):
         )
 
         self.assertEqual(self.bucket.fill_level, 0)
+    
+    def test_drink_from_empty(self):
+        self.bucket.fill_level = 0
+
+        self.call(
+            basic_cmds.CmdDrink(),
+            f"{self.bucket}",
+            f"You can't drink from an empty {self.bucket}({self.bucket.dbref})."
+        )
+
+        self.assertEqual(self.bucket.fill_level, 0)
+
+class TestEatCommands(EvenniaCommandTest):
+    def setUp(self):
+        super().setUp()
+
+        self.item = prototypes.spawner.spawn("tomato")[0]
+        self.bucket = prototypes.spawner.spawn("bucket")[0]
+
+        self.put_string = f"{self.item} in {self.bucket}"
+
+        self.item.move_to(self.char1)
+        self.bucket.move_to(self.room1)
+
+        self.bucket.fill_level = 10
+        self.bucket.liquid = "water"
 
     def test_eat_nothing(self):
         self.call(basic_cmds.CmdEat(), "", "Eat what?")
