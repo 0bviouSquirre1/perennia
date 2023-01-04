@@ -1,8 +1,7 @@
-from commands.command import Command
 from evennia.commands.default.muxcommand import MuxCommand
-from evennia import CmdSet, utils
-
-import inflect
+from evennia import CmdSet
+from typeclasses.plantobjects import HarvestableObject
+from typeclasses.liquidobjects import LiquidContainer
 
 
 class CmdPut(MuxCommand):
@@ -128,7 +127,7 @@ class CmdGet(MuxCommand):
             obj.at_get(caller)
 
 
-class CmdDrink(Command):
+class CmdDrink(MuxCommand):
     """
     Consume a liquid of your choice.
 
@@ -139,31 +138,44 @@ class CmdDrink(Command):
     """
 
     key = "drink"
-    aliases = ["sip", "quaff"]
+    aliases = ["sip", "quaff", "drink from"]
     help_category = "Interaction"
 
     def func(self):
+        caller = self.caller
+
         if not self.args:
-            self.caller.msg("Drink what?")
+            caller.msg("Drink what?")
             return
 
-        container = self.caller.search(self.args)
-        if not utils.inherits_from(
-            container, "typeclasses.liquidobjects.LiquidContainer"
-        ):
-            self.caller.msg("You can't drink that!")
+        container = caller.search(self.args, quiet=True)
+
+        if not container:
+            caller.msg(f"I cannot find that.")
             return
 
-        string = f"$You() $conj(take) a sip from a $obj(vessel)."
-        container.fill_level -= 1
+        container = container[0]
+
+        if not isinstance(container, LiquidContainer):
+            caller.msg("You can't drink that!")
+            return
+
         if container.fill_level == 0:
-            string += f" You have emptied a $obj(vessel)."
-        self.caller.location.msg_contents(
-            string, from_obj=self.caller, mapping={"vessel": container}
-        )
+            caller.msg(f"You can't drink from an empty {container}.")
+        else:
+            container.transfer(-1, container.liquid)
+
+            string = f"$You() $conj(take) a sip from a $obj(vessel)."
+
+            if container.fill_level == 0:
+                string += f" This empties a $obj(vessel)."
+
+            caller.location.msg_contents(
+                string, from_obj=caller, mapping={"vessel": container}
+            )
 
 
-class CmdEat(Command):
+class CmdEat(MuxCommand):
     """
     Consume a food of your choice.
 
@@ -174,28 +186,93 @@ class CmdEat(Command):
     """
 
     key = "eat"
-    aliases = "munch"
+    aliases = ["munch"]
     help_category = "Interaction"
 
     def func(self):
+        caller = self.caller
+
         if not self.args:
-            self.caller.msg("Eat what?")
+            caller.msg("Eat what?")
             return
 
-        obj = self.caller.search(self.args, quiet=True)
+        obj = self.caller.search(self.args, location=caller, quiet=True)
+
         if not obj:
+            caller.msg(f"You cannot eat that.")
             return
-        if len(obj) > 1:
-            for objec in obj:
-                if objec.location == self.caller:
-                    obj = objec
-                    break
+
         obj = obj[0]
+
+        if not isinstance(obj, HarvestableObject):
+            caller.msg("That's not edible!")
+            return
+
         string = f"$You() $conj(eat) a $obj(food) with obvious enthusiasm."
-        self.caller.location.msg_contents(
-            string, from_obj=self.caller, mapping={"food": obj}
+        caller.location.msg_contents(
+            string, from_obj=caller, mapping={"food": obj}
         )
         obj.delete()
+
+
+class CmdGive(MuxCommand):
+    """
+    Give something to someone else
+
+    Usage:
+      GIVE <object> TO <target>
+
+    Gives an item from your inventory to another person,
+    placing it in their inventory.
+    """
+
+    key = "give"
+    rhs_split = [" to "]
+    locks = "cmd:all()"
+    arg_regex = r"\s|$"
+    help_category = "Interaction"
+
+    def func(self):
+        """Implement give"""
+
+        caller = self.caller
+        if not self.args or not self.rhs:
+            caller.msg("Usage: GIVE <inventory object> TO <target>")
+            return
+
+        to_give = caller.search(
+            self.lhs,
+            location=caller,
+            nofound_string=f"You aren't carrying {self.lhs}.",
+            multimatch_string=f"You carry more than one {self.lhs}:",
+        )
+
+        target = caller.search(self.rhs)
+        if not (to_give and target):
+            return
+
+        singular, _ = to_give.get_numbered_name(1, caller)
+        if target == caller:
+            caller.msg(f"You keep {singular} to yourself.")
+            return
+
+        if not to_give.location == caller:
+            caller.msg(f"You are not holding {singular}.")
+            return
+
+        # calling at_pre_give hook method
+        if not to_give.at_pre_give(caller, target):
+            return
+
+        # give object
+        success = to_give.move_to(target, quiet=True, move_type="give")
+        if not success:
+            caller.msg(f"You could not give {singular} to {target.key}.")
+        else:
+            target.msg(f"{caller.key} gives you {singular}.")
+            # Call the object script's at_give() method.
+            to_give.at_give(caller, target)
+            caller.location.msg_contents(f"$You() $conj(give) {singular} to $Obj(target).", from_obj=caller, mapping={"target": target.key}, exclude=target)
 
 
 class BasicCmdSet(CmdSet):
@@ -204,3 +281,4 @@ class BasicCmdSet(CmdSet):
         self.add(CmdGet)
         self.add(CmdDrink)
         self.add(CmdEat)
+        self.add(CmdGive)

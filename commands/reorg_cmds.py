@@ -36,10 +36,6 @@ class HelpCmdDrop(general.CmdDrop):
     help_category = "Interaction"
 
 
-class HelpCmdGive(general.CmdGive):
-    help_category = "Interaction"
-
-
 class HelpCmdInventory(general.CmdInventory):
     help_category = "Personal Info"
 
@@ -70,7 +66,6 @@ class HelpCmdSet(CmdSet):
         self.add(HelpCmdHelp)
         self.add(HelpCmdNick)
         self.add(HelpCmdDrop)
-        self.add(HelpCmdGive)
         self.add(HelpCmdInventory)
         self.add(HelpCmdLook)
         self.add(HelpCmdPose)

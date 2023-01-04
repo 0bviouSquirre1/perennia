@@ -20,6 +20,8 @@ create/drop cupboard
 #
 set cupboard/desc = An old wooden cupboard takes up the far corner.
 #
+lock cupboard = "get: not perm(Player)"
+#
 tel cupboard
 #
 spawn spoon
