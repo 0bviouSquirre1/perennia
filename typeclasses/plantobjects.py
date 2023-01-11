@@ -50,8 +50,8 @@ class GrowthScript(DefaultScript):
         self.plant = self.obj
 
     def at_repeat(self, **kwargs):
-        counter = self.plant.produce_counter
-        if counter < 0:
-            counter = 0
-        elif counter < 10:
-            counter += 1
+        plant = self.plant
+        if plant.produce_counter < 0:
+            plant.produce_counter = 0
+        elif plant.produce_counter < 10:
+            plant.produce_counter += 1
