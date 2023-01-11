@@ -35,6 +35,15 @@ class LiquidContainer(Object):
         else:
             self.liquid = liquid
 
+class FillContainer(LiquidContainer):
+    
+    def refill(self):
+        fill = self.fill_level
+        capacity = self.capacity
+
+        if fill < capacity:
+            fill += 1
+
 class BoilContainer(LiquidContainer):
 
     def boil(self, container):
