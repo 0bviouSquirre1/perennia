@@ -1,5 +1,5 @@
 from typeclasses.objects import Object
-from evennia import AttributeProperty, search_tag
+from evennia import AttributeProperty, search_tag, DefaultScript
 
 class LiquidContainer(Object):
     capacity = AttributeProperty(100)
@@ -35,15 +35,6 @@ class LiquidContainer(Object):
         else:
             self.liquid = liquid
 
-class FillContainer(LiquidContainer):
-    
-    def refill(self):
-        fill = self.fill_level
-        capacity = self.capacity
-
-        if fill < capacity:
-            fill += 1
-
 class BoilContainer(LiquidContainer):
 
     def boil(self, container):
@@ -61,3 +52,23 @@ class BoilContainer(LiquidContainer):
             string += f"$You() can't boil anything without water!"
 
         return string
+
+class FillContainer(LiquidContainer):
+    
+    def at_object_creation(self):
+        self.scripts.add(FillScript)
+    
+class FillScript(DefaultScript):
+
+    def at_script_creation(self):
+        self.key = "fill_script"
+        self.desc = "Refilling water sources"
+        self.interval = 60 * 30
+        self.container = self.obj
+
+    def at_repeat(self, **kwards):
+        fill = self.container.fill_level
+        capacity = self.container.capacity
+
+        if fill < capacity:
+            fill += 1
