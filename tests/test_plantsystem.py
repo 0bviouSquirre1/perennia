@@ -32,7 +32,6 @@ class TestPlantSystem(EvenniaTest):
     def setUp(self):
         super().setUp()
         self.plant = prototypes.spawner.spawn("tomato_plant")[0]
-        self.scripty = self.plant.scripts.get("growth_script")[0]
 
     def test_be_harvested_zero(self):
         self.plant.produce_counter = 0
@@ -47,6 +46,12 @@ class TestPlantSystem(EvenniaTest):
         self.plant.be_harvested(self.char2)
 
         self.assertEqual(self.plant.produce_counter, 1)
+
+class TestPlantScript(EvenniaTest):
+    def setUp(self):
+        super().setUp()
+        self.plant = prototypes.spawner.spawn("tomato_plant")[0]
+        self.scripty = self.plant.scripts.get("growth_script")[0]
 
     def test_at_repeat_zero(self):
         self.plant.produce_counter = 0

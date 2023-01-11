@@ -248,5 +248,29 @@ class TestLiquidSystem(EvenniaTest):
         self.assertEqual(self.well.db.fill_level, 0)
         self.assertEqual(self.kettle.db.fill_level, 20)
 
-    def test_boil(self):
-        pass
+class TestLiquidScript(EvenniaTest):
+    def setUp(self):
+        super().setUp()
+        self.well = prototypes.spawner.spawn("well")[0]
+        self.scripty = self.well.scripts.get("fill_script")[0]
+
+    def test_at_repeat_empty(self):
+        self.well.fill_level = 0
+
+        self.scripty.at_repeat()
+
+        self.assertEqual(self.well.fill_level, 1)
+
+    def test_at_repeat_full(self):
+        self.well.fill_level = 1000
+
+        self.scripty.at_repeat()
+        
+        self.assertEqual(self.well.fill_level, 1000)
+    
+    def test_at_repeat_less_than_zero(self):
+        self.well.fill_level = -10
+
+        self.scripty.at_repeat()
+        
+        self.assertEqual(self.well.fill_level, 1)

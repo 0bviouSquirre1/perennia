@@ -63,12 +63,13 @@ class FillScript(DefaultScript):
     def at_script_creation(self):
         self.key = "fill_script"
         self.desc = "Refilling water sources"
-        self.interval = 60 # * 30
+        self.interval = 60 * 30
         self.container = self.obj
 
-    def at_repeat(self, **kwards):
-        fill = self.container.fill_level
-        capacity = self.container.capacity
+    def at_repeat(self, **kwargs):
+        container = self.container
 
-        if fill < capacity:
-            fill += 1
+        if container.fill_level <= 0:
+            container.fill_level = 0
+        if container.fill_level < container.capacity:
+            container.fill_level += 1
