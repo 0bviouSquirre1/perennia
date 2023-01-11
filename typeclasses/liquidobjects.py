@@ -63,7 +63,7 @@ class FillScript(DefaultScript):
     def at_script_creation(self):
         self.key = "fill_script"
         self.desc = "Refilling water sources"
-        self.interval = 60 * 30
+        self.interval = 60 # * 30
         self.container = self.obj
 
     def at_repeat(self, **kwards):

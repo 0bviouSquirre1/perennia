@@ -51,6 +51,7 @@ plant_string = "typeclasses.plantobjects.Plant"
 harvest_string = "typeclasses.plantobjects.HarvestableObject"
 liquid_string = "typeclasses.liquidobjects.LiquidContainer"
 boil_string = "typeclasses.liquidobjects.BoilContainer"
+fill_string = "typeclasses.liquidobjects.FillContainer"
 
 # region Plants
 MINT = {
@@ -138,7 +139,7 @@ NIGHTSHADE_BERRY = {
 WELL = {
     "prototype_key": "well",
     "key": "stone well",
-    "typeclass": liquid_string,
+    "typeclass": fill_string,
     "desc": "an old stone well",
     "capacity": 1000,
     "fill_level": 1000,
