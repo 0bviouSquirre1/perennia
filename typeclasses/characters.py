@@ -34,17 +34,6 @@ class Character(ObjectParent, DefaultCharacter):
     default_pronouns = ["ey/em/eirs/eirself"]
     pronouns = AttributeProperty(default_pronouns, category="personal")
 
-
-    def at_pre_move(self, destination):
-       """
-       Called by self.move_to when trying to move somewhere. If this returns
-       False, the move is immediately cancelled.
-       """
-       if self.db.is_resting:
-           self.msg("You need to stand up first.")
-           return False
-       return True
-
     def get_display_name(self, looker=None, **kwargs):
         """
         Displays the name of the object in a viewer-aware manner.
