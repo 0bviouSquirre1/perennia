@@ -17,7 +17,7 @@ own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 from evennia import default_cmds
 from commands import liquid_cmds, plant_cmds, basic_cmds, reorg_cmds
 from evennia.contrib.utils.git_integration import GitCmdSet
-
+from evennia.contrib.grid import extended_room
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
@@ -41,6 +41,7 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         self.add(plant_cmds.PlantCmdSet)
         self.add(basic_cmds.BasicCmdSet)
         self.add(reorg_cmds.HelpCmdSet)
+        self.add(extended_room.ExtendedRoomCmdSet)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):

@@ -10,9 +10,10 @@ from collections import defaultdict
 from .objects import ObjectParent
 from evennia import utils
 from evennia.utils.utils import iter_to_str
+from evennia.contrib.grid.extended_room import ExtendedRoom
 
 
-class Room(ObjectParent, DefaultRoom):
+class Room(ObjectParent, ExtendedRoom):
     """
     Rooms are like any Object, except their location is None
     (which is default). They also use basetype_setup() to

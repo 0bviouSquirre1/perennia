@@ -9,6 +9,8 @@ out
 set kitchen/long_name = A tidy little kitchen
 # 
 set kitchen/desc = Bottles and jars line the shelves of this homey cookspace. A small hearth in one corner warms the cottage.
+#
+detail hearth = A small hearth of river rocks provides space for a fire.
 # 
 spawn kettle
 # 
@@ -61,6 +63,10 @@ room
 set front room/long_name = A cozy sitting area
 # 
 set front room/desc = An overstuffed couch strewn with knitted and woven blankets sits beneath a window in the western wall, and on the north a bookcase stands packed with a jumble of mismatched tomes.
+#
+detail couch = This couch has seen many years of use, but the cushions and blankets draped over it promise a restful nap. Later.
+#
+detail bookcase = This bookcase is packed full of cozy murder mysteries and cookbooks.
 # 
 dig front step = the front step;front step;front;step;s, the front room;front room;front;room;r
 #
@@ -68,7 +74,11 @@ step
 # 
 set front step/long_name = A set of stone steps
 # 
-set front step/desc = Stone steps lead up to a sturdy wooden door held together with iron bands at the top and bottom. Flowers crowd the threshold and bees can be heard buzzing among them. A flagstone path leads south through a wooden gate and into the shadows of the trees.
+set front step/desc = Stone steps lead up to a sturdy wooden door held together with iron bands at the top and bottom. Flowers crowd the threshold and bees can be heard buzzing among them. A flagstone path leads through a wooden gate and into the shadows of the trees.
+#
+detail door = This door has seen years of use and still stands strong against the elements.
+#
+detail gate = This wooden gate provides an entrance to the forest that surrounds this cottage.
 # 
 spawn sunflower_plant
 # 
