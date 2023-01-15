@@ -35,6 +35,8 @@ from evennia.settings_default import *
 SERVERNAME = "perennia"
 MULTISESSION_MODE = 3
 IN_GAME_ERRORS = False
+EXTRA_LAUNCHER_COMMANDS['xyzgrid'] = 'evennia.contrib.grid.xyzgrid.launchcmd.xyzcommand'
+PROTOTYPE_MODULES += ['evennia.contrib.grid.xyzgrid.prototypes']
 
 
 ######################################################################
